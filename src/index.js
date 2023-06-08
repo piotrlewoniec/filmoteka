@@ -16,9 +16,8 @@ const config = {
 loadPopularMovies();
 
 async function loadPopularMovies() {
-  const genres = await fetchGenres();
   const movies = await fetchPopularMovies();
-  renderMovieList(movies.data.results, genres);
+  renderMovieList(movies.data.results);
 }
 
 async function fetchPopularMovies() {
@@ -33,17 +32,18 @@ async function fetchGenres() {
   return new Map(genres.data.genres.map(genre => [genre.id, genre.name]));
 }
 
-async function renderMovieList(movieList, genres) {
-  console.log(movieList);
-  const markup = movieList.map(movie => {
-    return `
+async function renderMovieList(movieList) {
+  const genres = await fetchGenres();
+  const markup = movieList
+    .map(movie => {
+      return `
      <div class="movie-card"> 
        <img class="movie-card__poster" src="
 https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${
-      movie.title
-    }" loading="lazy" width="280" height="398" />
+        movie.title
+      }" loading="lazy" width="280" height="398" />
      <ul class="movie-card__info">
-       <li class="movie-card__title">${movie.title}</li>
+       <li class="movie-card__title">${truncateTitle(movie.title)}</li>
        <li class="movie-card__genre">${getGenresNamesAndYear(
          genres,
          movie.genre_ids,
@@ -52,13 +52,29 @@ https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${
      </ul>
     </div>
       `;
-  });
+    })
+    .join(' ');
   movieListContainer.innerHTML = markup;
-  console.log(movieListContainer);
+}
+
+function truncateTitle(title) {
+  return title.length < 33 ? title : title.slice(0, 29) + '...';
 }
 
 function getGenresNamesAndYear(genres, genre_ids, release_date) {
-  const genresNames = genre_ids.map(id => genres.get(id)).join(', ');
+  const genresNames = getGenresNames(genres, genre_ids);
   const year = new Date(release_date).getFullYear();
   return genresNames + ' | ' + year;
+}
+
+function getGenresNames(genres, genre_ids) {
+  const genresList = genre_ids.map(id => genres.get(id));
+  let filteredGenres = [];
+  if (genresList.length > 2) {
+    filteredGenres = genresList.slice(0, 2);
+    filteredGenres.push('Other');
+  } else {
+    filteredGenres = genresList;
+  }
+  return filteredGenres.join(', ');
 }
