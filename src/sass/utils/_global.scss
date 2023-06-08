@@ -1,0 +1,26 @@
+@use 'variables' as var;
+
+html {
+  scroll-behavior: smooth;
+}
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+// a {
+//   outline: none;
+// }
+// ul {
+//   list-style: none;
+// }
+body {
+  font-family: var.$fontPrimary;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.76;
+  letter-spacing: 0.04em;
+}

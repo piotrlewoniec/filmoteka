@@ -1,0 +1,20 @@
+@use 'mediaquery' as mq;
+
+$mobile: mq.getBreakPoint(small); //upstream
+$tablet: mq.getBreakPoint(medium); //upstream
+$desktop: mq.getBreakPoint(large); //upstream
+$deafultPaddingLeft: 20px; // local
+$deafultPaddingRight: 20px; // local
+
+.container {
+  max-width: $mobile;
+  @include mq.mq(medium) {
+    max-width: $tablet;
+  }
+  @include mq.mq(large) {
+    max-width: $desktop;
+  }
+  margin: 0 auto;
+  padding-left: $deafultPaddingLeft;
+  padding-right: $deafultPaddingRight;
+}
