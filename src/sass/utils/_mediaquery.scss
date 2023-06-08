@@ -1,0 +1,105 @@
+@use 'sass:map';
+
+$mobileStart: 320px;
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1280px;
+// media devices
+
+@mixin tablet {
+  @media screen and (min-width: #{$tablet}) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media screen and (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin media-mobile-min {
+  @media screen and (min-width: #{$mobile}) {
+    @content;
+  }
+}
+
+@mixin media-mobile-max1 {
+  @media screen and (max-width: #{$mobile}) {
+    @content;
+  }
+}
+
+@mixin media-mobile-max {
+  @media screen and (max-width: calc($tablet - 1)) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media screen and (min-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin media-tablet-range {
+  @media screen and (min-width: #{$tablet}) and (max-width: calc($desktop - 1)) {
+    @content;
+  }
+}
+
+@mixin media-tablet-max {
+  @media screen and (max-width: calc($desktop - 1)) {
+    @content;
+  }
+}
+
+@mixin media-desktop {
+  @media screen and (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+$breakpoints: (
+  tiny: 320px,
+  small: 480px,
+  medium: 768px,
+  large: 1280px,
+);
+@function getBreakPoint($key) {
+  @return map.get($breakpoints, $key);
+}
+
+@mixin breakpoint($key) {
+  breakpoint: map.get($breakpoints, $key);
+}
+@mixin mq($key1, $add: null, $key2: null) {
+  $size1: map.get($breakpoints, $key1);
+  $size2: map.get($breakpoints, $key2);
+  @if ($add == null) {
+    @media (min-width: $size1) {
+      @content;
+    }
+  } @else if ($add == and) {
+    @media (min-width: $size1) and (max-width: calc($size2 - 1px)) {
+      @content;
+    }
+  }
+}
+
+@mixin mediaDPR1 {
+  @media (min-device-pixel-ratio: 1), (min-resolution: 96dpi), (min-resolution: 1dppx) {
+    @content;
+  }
+}
+
+@mixin mediaDPR2 {
+  @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+@mixin mediaDPR3 {
+  @media (min-device-pixel-ratio: 3), (min-resolution: 288dpi), (min-resolution: 3dppx) {
+    @content;
+  }
+}
