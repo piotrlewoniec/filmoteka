@@ -51,7 +51,7 @@
   }
   &:is(:focus, :hover) {
     stroke: var.$active-color;
-    color: var.$accent-color;
+    color: var.$active-color;
   }
 }
 
@@ -67,6 +67,10 @@
   &-item {
     &:not(:last-child) {
       margin-right: 39px;
+    }
+    &:is(:focus, :hover) {
+      color: var.$active-color;
+      cursor: pointer;
     }
     &--library {
       position: relative;
@@ -102,6 +106,7 @@
   line-height: 1.16;
   text-transform: uppercase;
   background: none;
+  cursor: pointer;
   &--margin {
     margin-right: 19.94px;
   }
