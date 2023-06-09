@@ -88,6 +88,9 @@
       }
     }
   }
+  &-link {
+    color: var.$background-color-lighter;
+  }
 }
 
 .header__buttons {
