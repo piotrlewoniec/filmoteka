@@ -1,0 +1,203 @@
+@use '../utils/mediaquery' as mq;
+@use '../utils/variables' as var;
+
+.header {
+  padding: 40px 20px 62px 20px;
+  &--library {
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+      url(/src/images/header/library-mobile.png);
+    @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/library-mobile@2x.png);
+      }
+    }
+    @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/library-mobile@3x.png);
+      }
+    }
+  }
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px;
+  }
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  stroke: var.$background-color-lighter;
+  fill: none;
+  color: var.$background-color-lighter;
+  &-icon {
+    width: 24px;
+    height: 24px;
+  }
+  &-text {
+    display: none;
+  }
+  &:is(:focus, :hover) {
+    stroke: var.$active-color;
+    color: var.$accent-color;
+  }
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.16;
+  text-transform: uppercase;
+  color: var.$background-color-lighter;
+  &-item {
+    &:not(:last-child) {
+      margin-right: 39px;
+    }
+    &--library {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 14px;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: var.$accent-color;
+      }
+    }
+  }
+}
+
+.header__buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.header__btn {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var.$background-color-lighter;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.16;
+  text-transform: uppercase;
+  background: none;
+  &--margin {
+    margin-right: 19.94px;
+  }
+  &:is(:focus, :hover) {
+    box-shadow: 0px 8px 43px rgba(255, 107, 1, 0.6);
+    border: none;
+    background: var.$active-color;
+  }
+}
+
+@include mq.tablet {
+  .header {
+    padding: 40px 32px 60px 32px;
+    &--library {
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+        url(/src/images/header/library-tablet.png);
+      @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+        & {
+          background-image: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.56) 50%,
+              rgba(0, 0, 0, 0.56) 50%
+            ),
+            url(/src/images/header/library-tablet@2x.png);
+        }
+      }
+      @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+        & {
+          background-image: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.56) 50%,
+              rgba(0, 0, 0, 0.56) 50%
+            ),
+            url(/src/images/header/library-tablet@3x.png);
+        }
+      }
+    }
+    &__wrapper {
+      margin-bottom: 40px;
+    }
+    &__btn {
+      width: 152px;
+      height: 44px;
+      &--margin {
+        margin-right: 32px;
+      }
+    }
+    &__logo-text {
+      display: block;
+      margin-left: 10px;
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 1.16;
+    }
+  }
+}
+
+@include mq.desktop {
+  .header {
+    padding: 40px 32px 60px 32px;
+    &--library {
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+        url(/src/images/header/library-desktop.png);
+      @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+        & {
+          background-image: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.56) 50%,
+              rgba(0, 0, 0, 0.56) 50%
+            ),
+            url(/src/images/header/library-desktop@2x.png);
+        }
+      }
+      @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+        & {
+          background-image: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.56) 50%,
+              rgba(0, 0, 0, 0.56) 50%
+            ),
+            url(/src/images/header/library-desktop@3x.png);
+        }
+      }
+    }
+    &__container {
+      max-width: 1280px;
+    }
+    &__wrapper {
+      margin-bottom: 40px;
+    }
+    &__btn {
+      width: 148px;
+      height: 42px;
+      &--margin {
+        margin-right: 16px;
+      }
+    }
+  }
+}
