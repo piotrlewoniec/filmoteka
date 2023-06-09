@@ -9,7 +9,20 @@
   font-family: var.$fontPrimary;
   line-height: 1.17;
   color: var.$text-color-lighter;
+  // Visual
+  background-color: var.$background-color-darker;
+  &__img {
+    // Box model
+    vertical-align: middle;
+    // Visual
+    border-radius: 10px;
+    &:focus,
+    &:hover {
+      border: 1px solid var.$active-color;
+    }
+  }
 }
+
 // // Positioning
 // position: absolute;
 // top: 0;
