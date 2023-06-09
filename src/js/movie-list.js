@@ -1,4 +1,3 @@
-import '../sass/main.scss';
 import axios from 'axios';
 
 const movieListContainer = document.querySelector('.movie-list-container');
