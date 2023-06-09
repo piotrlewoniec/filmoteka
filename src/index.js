@@ -38,10 +38,25 @@ async function renderMovieList(movieList) {
     .map(movie => {
       return `
      <div class="movie-card"> 
-       <img class="movie-card__poster" src="
-https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${
-        movie.title
-      }" loading="lazy" width="280" height="398" />
+       <img class="movie-card__poster" 
+         src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+         alt="${movie.title}" 
+         loading="lazy" 
+         width="280" 
+         height="398" 
+         srcset="
+           https://image.tmdb.org/t/p/w342${movie.poster_path} 280w,
+           https://image.tmdb.org/t/p/w780${movie.poster_path} 560w,
+           https://image.tmdb.org/t/p/original${movie.poster_path} 840w,
+           https://image.tmdb.org/t/p/w342${movie.poster_path} 336w,
+           https://image.tmdb.org/t/p/w780${movie.poster_path} 672w,
+           https://image.tmdb.org/t/p/original${movie.poster_path} 1008w,
+           https://image.tmdb.org/t/p/w500${movie.poster_path} 395w,
+           https://image.tmdb.org/t/p/original${movie.poster_path} 790w,
+           https://image.tmdb.org/t/p/original${movie.poster_path} 1185w
+         "
+         sizes="(min-width: 1280px) 395px, (min-width: 768px) 336px, 280px"
+      />
      <ul class="movie-card__info">
        <li class="movie-card__title">${truncateTitle(movie.title)}</li>
        <li class="movie-card__genre">${getGenresNamesAndYear(
