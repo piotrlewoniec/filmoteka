@@ -21,8 +21,97 @@
       border: 1px solid var.$active-color;
     }
   }
+  &__box {
+    padding: 20px;
+    text-align: center;
+  }
+}
+.button {
+  border-color: transparent;
+  border-radius: 10px;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fff5f633;
+  transition-property: visibility, opacity, transform;
+  transition-duration: 1s;
+
+  &--hidden {
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    animation-name: aboutModalClose;
+    animation-duration: 2000ms;
+    animation-timing-function: linear;
+  }
+}
+.window {
+  position: relative;
+  width: 320px;
+  background-color: var.$background-color-darker;
+  border: transparent;
+  padding: 40px;
+  animation-name: aboutModalClose;
+  animation-duration: 1000ms;
+  animation-direction: reverse;
+  animation-timing-function: linear;
+
+  // @include desktop {
+  //   width: 530px;
+  // }
+}
+
+.button-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  border: var.$accent-color;
+  cursor: pointer;
+  border-radius: 50px;
+  &__icon {
+    padding: 6px;
+    margin: 0;
+    fill: var.$accent-color;
+    background-color: var.$background-color-darker;
+    border-radius: 50%;
+  }
+}
+@keyframes aboutModalClose {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.75);
+  }
+  50% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(0.25);
+  }
+}
+.list {
+  list-style: none;
+  text-align: center;
+  &__title {
+    padding: 6px;
+    color: red;
+  }
+  &__item {
+    padding: 2px;
+  }
+}
 // // Positioning
 // position: absolute;
 // top: 0;
