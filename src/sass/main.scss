@@ -7,5 +7,7 @@
 @use './utils/reset';
 @use './utils/global';
 @use './partials/header';
+@use './partials/movie-list';
 @use './partials/pagination';
-@use 'partials/footer';
+@use './partials/footer';
+
