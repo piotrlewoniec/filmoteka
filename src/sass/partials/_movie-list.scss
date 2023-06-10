@@ -1,11 +1,11 @@
-@use '../utils/variables';
+@use '../utils/variables' as var;
 @use '../utils/container';
 @use '../utils/mediaquery';
 
 .movie-list {
   &-section {
     @extend .container;
-    background-color: variables.$background-color-lighter;
+    background-color: var.$background-color-lighter;
     padding-bottom: 40px;
     padding-top: 20px;
     @include mediaquery.tablet {
@@ -16,7 +16,7 @@
     }
   }
   &-container {
-    background-color: variables.$background-color-lighter;
+    background-color: var.$background-color-lighter;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,11 +26,13 @@
     @include mediaquery.tablet {
       flex-direction: row;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 32px;
       max-width: 768px;
     }
     @include mediaquery.desktop {
       column-gap: 16px;
+      justify-content: start;
       max-width: 1280px;
       row-gap: 32px;
     }
@@ -69,7 +71,7 @@
   &__info {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    background-color: variables.$background-color-lighter;
+    background-color: var.$background-color-lighter;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -86,21 +88,21 @@
     }
   }
   &__title {
-    color: variables.$text-color-darker;
+    color: var.$text-color-darker;
     text-transform: uppercase;
   }
   &__genre {
-    color: variables.$active-color;
+    color: var.$active-color;
   }
 }
 
 .movie-card--placeholder {
   @extend .movie-card;
   box-sizing: border-box;
-  border: 4px solid variables.$active-color;
+  border: 4px solid var.$active-color;
   display: flex;
   align-items: center;
-  background-color: variables.$background-color-darker;
+  background-color: var.$background-color-darker;
   width: 280px;
   height: 440px;
   @include mediaquery.tablet {
@@ -114,7 +116,7 @@
     height: 634px;
   }
   &__title {
-    color: variables.$active-color;
+    color: var.$active-color;
     font-size: 45px;
     font-weight: 750;
     line-height: 1.33;
