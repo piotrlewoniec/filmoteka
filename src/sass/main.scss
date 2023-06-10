@@ -2,8 +2,8 @@
  * Główny plik dla stylów.
  * Wszystkie partials podłączamy tutaj.
  */
-@use './partials/header';
 
 // Style dla pliku z przykładem HTML fragmentu
 @use './utils/reset';
+@use './partials/header';
 @use './utils/global';
