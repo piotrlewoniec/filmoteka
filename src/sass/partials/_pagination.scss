@@ -1,0 +1,26 @@
+@use '../utils/mediaquery' as mq;
+@use '../utils/variables' as var;
+
+.pagination {
+  display: inline-block;
+  .pagination-btn,
+  .btn-arrow {
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    color: var.$text-color-darker;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-arrow {
+    background-color: var.$background-color-darker;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .active {
+    background-color: var.$active-color;
+    color: var.$background-color-lighter;
+    border-radius: 5px;
+  }
+}
