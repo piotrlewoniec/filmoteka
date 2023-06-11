@@ -64,11 +64,22 @@ async function renderMovieList(movieList) {
          movie.release_date,
        )}</li>
      </ul>
+     <button type="button" class="movie-card__trailer-button">Trailer
+        <svg class="movie-card__trailer-icon" width="24px" height="24px" viewBox="0 0 32 32">
+        </svg>
+     </button>
     </div>
       `;
     })
     .join(' ');
   movieListContainer.innerHTML = markup;
+
+  const svgs = document.querySelectorAll('.movie-card__trailer-icon');
+  for (const svg of svgs) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'm6 4 20 12L6 28z');
+    svg.appendChild(path);
+  }
 }
 
 function truncateTitle(title) {

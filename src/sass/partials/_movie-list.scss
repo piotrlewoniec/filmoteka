@@ -123,3 +123,23 @@
     text-align: center;
   }
 }
+
+.movie-card__trailer-button {
+  display: flex;
+  align-items: center;
+  background-color: var.$accent-color-darker;
+  border: none;
+  border-radius: 4px;
+  color: var.$background-color-lighter;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.87;
+  padding: 8px 28px 8px 42px;
+}
+
+.movie-card__trailer-icon {
+  fill: var.$background-color-lighter;
+  margin-left: 10px;
+}
