@@ -3,6 +3,22 @@
 
 .header {
   padding: 40px 20px 62px 20px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+    url(/src/images/header/main-mobile@1x.png);
+  @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+    & {
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+        url(/src/images/header/main-mobile@2x.png);
+    }
+  }
+  @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+    & {
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+        url(/src/images/header/main-mobile@3x.png);
+    }
+  }
   &--library {
     background-repeat: no-repeat;
     background-size: 100%;
@@ -68,6 +84,22 @@
     &:not(:last-child) {
       margin-right: 39px;
     }
+    &--homepage {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 14px;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: var.$accent-color;
+      }
+    }
+
     &--library {
       position: relative;
       &::after {
@@ -90,6 +122,61 @@
       color: var.$active-color;
       cursor: pointer;
     }
+  }
+}
+
+.header__form {
+  &-item {
+    display: flex;
+    justify-content: center;
+  }
+  &-searchfield {
+    position: relative;
+    &:hover > .header__form-input {
+      border-bottom-color: var.$active-color;
+      &.header__form-input::placeholder {
+        color: var.$active-color;
+      }
+      & ~ .header__form-searchbutton > .header__form-icon {
+        stroke: var.$active-color;
+      }
+    }
+    &:focus > .header__form-input {
+      border-bottom-color: var.$active-color;
+      &.header__form-input::placeholder {
+        color: var.$active-color;
+      }
+      & ~ .header__form-searchbutton > .header__form-icon {
+        stroke: var.$active-color;
+      }
+    }
+  }
+  &-input {
+    width: 280px;
+    font-size: 14px;
+    line-height: 1.17;
+    color: var.$background-color-lighter;
+    background-color: transparent;
+    border: 0;
+    border-bottom: 0.5px solid var.$background-color-lighter;
+    outline: none;
+    &::placeholder {
+      font-size: 14px;
+      line-height: 1.17;
+      color: var.$background-color-lighter;
+    }
+  }
+  &-searchbutton {
+    position: absolute;
+    top: 25%;
+    right: 0;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  &-icon {
+    stroke: var.$background-color-lighter;
+    fill: none;
   }
 }
 
@@ -123,6 +210,28 @@
 @include mq.tablet {
   .header {
     padding: 40px 32px 60px 32px;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+      url(/src/images/header/main-tablet@1x.png);
+    @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/main-tablet@2x.png);
+      }
+    }
+    @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/main-tablet@3x.png);
+      }
+    }
     &--library {
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
         url(/src/images/header/library-tablet.png);
@@ -167,11 +276,36 @@
     &__logo-icon {
       height: 22.85px;
     }
+    &__form-input {
+      width: 336px;
+    }
   }
 }
 
 @include mq.desktop {
   .header {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
+      url(/src/images/header/main-desktop@1x.png);
+    @media (min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/main-desktop@2x.png);
+      }
+    }
+    @media (min-device-pixel-ratio: 3), (min-resolution: 268dpi), (min-resolution: 3dppx) {
+      & {
+        background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.56) 50%,
+            rgba(0, 0, 0, 0.56) 50%
+          ),
+          url(/src/images/header/main-desktop@3x.png);
+      }
+    }
     &--library {
       background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.56) 50%, rgba(0, 0, 0, 0.56) 50%),
         url(/src/images/header/library-desktop.png);
@@ -209,6 +343,9 @@
       &--margin {
         margin-right: 16px;
       }
+    }
+    &__form-input {
+      width: 394px;
     }
   }
 }
