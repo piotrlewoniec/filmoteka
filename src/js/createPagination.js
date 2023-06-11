@@ -1,10 +1,15 @@
 import axios from 'axios';
+import Notiflix from 'notiflix';
+
 const moviesContainer = document.getElementById('movies');
 const paginationContainer = document.querySelector('.pagination');
 let currentPage = 1;
 let totalPages = 0;
 
 function fetchMovies(page) {
+  // Dodajemy notyfikację przed pobraniem filmów
+  Notiflix.Loading.pulse('Pobieranie filmów...');
+
   axios
     .get('https://api.themoviedb.org/3/movie/changes', {
       params: {
@@ -26,9 +31,18 @@ function fetchMovies(page) {
       totalPages = response.data.total_pages;
 
       renderPaginationButtons();
+
+      // Ukrywamy notyfikację po pobraniu filmów
+      Notiflix.Loading.remove();
     })
     .catch(function (error) {
       console.error(error);
+
+      // Wyświetlamy notyfikację o błędzie
+      Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
+
+      // Ukrywamy notyfikację po błędzie
+      Notiflix.Loading.remove();
     });
 }
 
