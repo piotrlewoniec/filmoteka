@@ -41,6 +41,7 @@
 
 .movie-card {
   border-radius: 5px;
+  position: relative;
   transition: transform 1000ms ease;
   &:focus,
   &:hover {
@@ -124,22 +125,66 @@
   }
 }
 
-.movie-card__trailer-button {
-  display: flex;
-  align-items: center;
-  background-color: var.$accent-color-darker;
-  border: none;
-  border-radius: 4px;
-  color: var.$background-color-lighter;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 1.87;
-  padding: 8px 28px 8px 42px;
+.movie-card__trailer {
+  &-button {
+    display: flex;
+    align-items: center;
+    background-color: var.$accent-color-darker;
+    border: none;
+    border-radius: 4px;
+    color: var.$background-color-lighter;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.87;
+    padding: 3px 33px 3px 46px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: background-color 1000ms linear;
+  }
+  &-button:focus,
+  &-button:hover {
+    background-color: var.$accent-color-focus-hover;
+  }
+  &-icon {
+    fill: var.$background-color-lighter;
+    margin-left: 10px;
+  }
 }
 
-.movie-card__trailer-icon {
-  fill: var.$background-color-lighter;
-  margin-left: 10px;
+.trailer {
+  &-backdrop {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  &-modal {
+    max-height: 50vw;
+    max-width: 90vw;
+    transform: translateY(50%) scale(1);
+    @include mq.tablet {
+      max-height: 45vw;
+      max-width: 80vw;
+    }
+    @include mq.desktop {
+      max-height: 28vw;
+      max-width: 49vw;
+    }
+  }
+}
+
+.is-hidden,
+.is-hidden .trailer-modal {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0%) scale(0);
 }

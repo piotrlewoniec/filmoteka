@@ -23,6 +23,10 @@ async function fetchPopularMovies() {
   return axios.get('https://api.themoviedb.org/3/trending/movie/day?language=en-US', config);
 }
 
+async function fetchTrailer(movieId) {
+  return axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, config);
+}
+
 async function fetchGenres() {
   const genres = await axios.get(
     'https://api.themoviedb.org/3/genre/movie/list?language=e',
@@ -33,9 +37,13 @@ async function fetchGenres() {
 
 async function renderMovieList(movieList) {
   const genres = await fetchGenres();
-  const markup = movieList
-    .map(movie => {
-      return `
+  const movieCards = movieList.map(async movie => {
+    const trailers = await fetchTrailer(movie.id);
+    const trailer = trailers.data.results.find(
+      trailer => trailer.official && trailer.type == 'Trailer',
+    );
+    const key = trailer != undefined ? trailer.key : '';
+    return `
      <div class="movie-card"> 
        <img class="movie-card__poster" 
          src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
@@ -64,15 +72,24 @@ async function renderMovieList(movieList) {
          movie.release_date,
        )}</li>
      </ul>
-     <button type="button" class="movie-card__trailer-button">Trailer
+     <button type="button" class="movie-card__trailer-button" 
+             data-trailer-key="${key}">Trailer
         <svg class="movie-card__trailer-icon" width="24px" height="24px" viewBox="0 0 32 32">
         </svg>
      </button>
     </div>
       `;
-    })
-    .join(' ');
-  movieListContainer.innerHTML = markup;
+  });
+  const markup = await Promise.all(movieCards);
+  movieListContainer.innerHTML = markup.join(' ');
+
+  const trailerButtons = document.querySelectorAll('.movie-card__trailer-button');
+  trailerButtons.forEach(trailerButton => {
+    trailerButton.onclick = function (event) {
+      event.preventDefault();
+      showTrailer(trailerButton.dataset.trailerKey);
+    };
+  });
 
   const svgs = document.querySelectorAll('.movie-card__trailer-icon');
   for (const svg of svgs) {
@@ -112,4 +129,16 @@ function renderMoviePlaceholders() {
     </div>`);
   }
   movieListContainer.innerHTML = placeholders.join(' ');
+}
+
+function showTrailer(key) {
+  const iframe = document.querySelector('#youtube-player');
+  iframe.src = `https://www.youtube.com/embed/${key}`;
+
+  const backdrop = document.querySelector('.trailer-backdrop');
+  backdrop.classList.remove('is-hidden');
+  backdrop.onclick = function () {
+    backdrop.classList.add('is-hidden');
+    iframe.src = '';
+  };
 }
