@@ -38,11 +38,7 @@ async function fetchGenres() {
 async function renderMovieList(movieList) {
   const genres = await fetchGenres();
   const movieCards = movieList.map(async movie => {
-    const trailers = await fetchTrailer(movie.id);
-    const trailer = trailers.data.results.find(
-      trailer => trailer.official && trailer.type == 'Trailer',
-    );
-    const key = trailer != undefined ? trailer.key : '';
+    const key = await getMovieTrailerKey(movie);
     return `
      <div class="movie-card"> 
        <img class="movie-card__poster" 
@@ -83,6 +79,19 @@ async function renderMovieList(movieList) {
   const markup = await Promise.all(movieCards);
   movieListContainer.innerHTML = markup.join(' ');
 
+  activateTrailerButtons();
+  createTrailerButtonIcons();
+}
+
+async function getMovieTrailerKey(movie) {
+  const trailers = await fetchTrailer(movie.id);
+  const trailer = trailers.data.results.find(
+    trailer => trailer.official && trailer.type == 'Trailer',
+  );
+  return trailer != undefined ? trailer.key : '';
+}
+
+function activateTrailerButtons() {
   const trailerButtons = document.querySelectorAll('.movie-card__trailer-button');
   trailerButtons.forEach(trailerButton => {
     trailerButton.onclick = function (event) {
@@ -90,7 +99,9 @@ async function renderMovieList(movieList) {
       showTrailer(trailerButton.dataset.trailerKey);
     };
   });
+}
 
+function createTrailerButtonIcons() {
   const svgs = document.querySelectorAll('.movie-card__trailer-icon');
   for (const svg of svgs) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -132,9 +143,16 @@ function renderMoviePlaceholders() {
 }
 
 function showTrailer(key) {
+  loadTrailer(key);
+  showTrailerModal();
+}
+
+function loadTrailer(key) {
   const iframe = document.querySelector('#youtube-player');
   iframe.src = `https://www.youtube.com/embed/${key}`;
+}
 
+function showTrailerModal() {
   const backdrop = document.querySelector('.trailer-backdrop');
   backdrop.classList.remove('is-hidden');
   backdrop.onclick = function () {
