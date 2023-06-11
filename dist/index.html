@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><link rel="stylesheet" href="/index.f7626f62.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+      integrity="sha512-wpPYUAdjBVSE4KJnH1VR1HeZfpl1ub8YT/NKx4PuQ5NmX2tKuGu6U/JRp5y+Y8XG2tV+wKQpNHVUX03MfMFn9Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /> -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
+      integrity="sha512-ISS7cAi1PEhQ8jnbJpJZMd29NlhNj4AWYyLOSp2CE/CsHxTCu+r+t0D2yoJudVrd0/8fTVPUVDzY5Tvli75u/g=="
+      crossorigin="anonymous"
+    /> -->
+    <title>Filmoteka</title>
+  </head>
+  <body>
+    <!-- Html partials header main footer -->
+    <header class="header">
+  <div class="header__container">
+    <div class="header__wrapper">
+      <a class="header__logo" href="/index.html">
+        <svg class="header__logo-icon">
+          <use href="/icons.9d5b6e5e.svg#icon-logo"></use>
+        </svg>
+        <span class="header__logo-text">Filmoteka</span>
+      </a>
+      <ul class="header__nav">
+        <li class="header__nav-item header__nav-item--homepage">
+          <a class="header__nav-link" href="/index.html">Home</a>
+        </li>
+        <li class="header__nav-item">
+          <a class="header__nav-link" href="/my-library.html">My library</a>
+        </li>
+      </ul>
+    </div>
+    <div class="header__form">
+      <form class="header__form-item">
+        <div class="header__form-searchfield">
+          <input class="header__form-input" name="film-search" type="text" placeholder="Movie search">
+          <button class="header__form-searchbutton" type="submit">
+            <svg class="header__form-icon" width="12" height="12">
+              <use href="/icons.9d5b6e5e.svg#icon-search"></use>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</header>
+
+    <main>
+      <!--section-movie-list-->
+<section class="movie-list-section">
+  <div class="movie-list-container"></div>
+</section>
+
+      <div id="movies"></div>
+<div class="pagination"></div>
+
+      <!-- Html partials main section pagination -->
+    </main>
+
+    <!-- <include src="./partials/example.html"></include> -->
+    <footer class="container footer">
+  <div class="footer__box">
+    © 2023 | All Rights Reserved |
+    <span>Developed by
+      <button type="button" class="button button__footer" data-modal-open="">
+        <picture class="footer__logo">
+          <source srcset="/logoCodeRonins-mobile.4143a19f.jpg 1x, /logoCodeRonins-mobile@2x.afbed07f.jpg 2x, /logoCodeRonins-mobile@3x.aae5f190.jpg 3x" media="(max-width: 767px)">
+          <source srcset="/logoCodeRonins-tablet.38d50730.jpg 1x, /logoCodeRonins-tablet@2x.e667b601.jpg 2x, /logoCodeRonins-tablet@3x.e5308bd2.jpg 3x" media="(max-width: 1199px)">
+          <source srcset="/logoCodeRonins-desktop.ac6e6451.jpg 1x, /logoCodeRonins-desktop@2x.809be4c6.jpg 2x, /logoCodeRonins-desktop@3x.886cc0af.jpg 3x" media="(max-width: 1600px)">
+          <img class="footer__img" src="/logoCodeRonins-desktop.ac6e6451.jpg" alt="logo Code Ronins" width="60" height="60">
+        </picture>
+      </button>
+      Code Ronins</span>
+  </div>
+  <div class="modal modal--hidden" data-modal="">
+    <div class="window">
+      <button data-modal-close="" class="button-close">
+        <svg class="button-close__icon" width="30px" height="30px">
+          <use href="/icons.ff3158c0.svg#icon-close"></use>
+        </svg>
+      </button>
+      <ul class="list list--modal">
+        <h3 class="list__title">Code Ronins:</h3>
+        <li class="list__item">Rafał Biżek</li>
+        <li class="list__item">Barbara Carvalho</li>
+        <li class="list__item">Julia Kalak</li>
+        <li class="list__item">Radosław Kisiela</li>
+        <li class="list__item">Piotr Lewoniec</li>
+        <li class="list__item">Jakub Pawlik</li>
+        <li class="list__item">Gleb Plotnikov</li>
+        <li class="list__item">Arek Wilczyński</li>
+        <li class="list__item">Dawid Wróbel</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- Scripts -->
+    <script src="/index.975ef6c8.js" defer=""></script>
+  </body>
+</html>
