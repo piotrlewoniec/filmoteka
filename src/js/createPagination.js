@@ -32,7 +32,7 @@ function fetchMovies(page) {
 
       renderPaginationButtons();
 
-      // Ukrywamy notyfikację po pobraniu filmów
+      // Ukrywamy notyfikację po pobraniu filmow
       Notiflix.Loading.remove();
     })
     .catch(function (error) {
