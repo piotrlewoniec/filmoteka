@@ -1,3 +1,3 @@
-import './searchByTitle';
-import './movie-list';
-import './createPagination';
+import './main-page-searchByTitle';
+import './main-page-trending';
+// import './createPagination';

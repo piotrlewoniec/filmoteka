@@ -2,7 +2,7 @@
 @use '../utils/variables' as var;
 
 .pagination {
-  display: inline-block;
+  display: block;
   .pagination-btn,
   .btn-arrow {
     background-color: transparent;
@@ -22,5 +22,10 @@
     background-color: var.$active-color;
     color: var.$background-color-lighter;
     border-radius: 5px;
+  }
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
