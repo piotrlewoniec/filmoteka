@@ -1,38 +1,9 @@
-import axios from 'axios';
+import { axiosGetData } from '../apirest/axiosGetData';
+import { defaultHeaderGet, genresUrl, genresUrlParams } from '../config/stdquery';
+import { apikeyTMDB } from '../config/apikey';
 
-const movieListContainer = document.querySelector('.movie-list-container');
-
-const config = {
-  headers: {
-    accept: 'application/json',
-  },
-  params: {
-    api_key: '201a0d25c5ee0bd75c195a2bbfd9dec7',
-  },
-};
-
-renderMoviePlaceholders();
-loadPopularMovies();
-
-async function loadPopularMovies() {
-  const movies = await fetchPopularMovies();
-  renderMovieList(movies.data.results);
-}
-
-async function fetchPopularMovies() {
-  return axios.get('https://api.themoviedb.org/3/trending/movie/day?language=en-US', config);
-}
-
-async function fetchGenres() {
-  const genres = await axios.get(
-    'https://api.themoviedb.org/3/genre/movie/list?language=e',
-    config,
-  );
-  return new Map(genres.data.genres.map(genre => [genre.id, genre.name]));
-}
-
-async function renderMovieList(movieList) {
-  const genres = await fetchGenres();
+export async function renderMovieList(movieListContainer, movieList) {
+  const genres = await getGenres();
   const markup = movieList
     .map(movie => {
       return `
@@ -71,6 +42,13 @@ async function renderMovieList(movieList) {
   movieListContainer.innerHTML = markup;
 }
 
+async function getGenres() {
+  const header = { ...defaultHeaderGet, ...genresUrl };
+  const parameters = { ...genresUrlParams, api_key: apikeyTMDB };
+  const genres = await axiosGetData(header, parameters);
+  return new Map(genres.data.genres.map(genre => [genre.id, genre.name]));
+}
+
 function truncateTitle(title) {
   return title.length < 33 ? title : title.slice(0, 29) + '...';
 }
@@ -91,14 +69,4 @@ function getGenresNames(genres, genre_ids) {
     filteredGenres = genresList;
   }
   return filteredGenres.join(', ');
-}
-
-function renderMoviePlaceholders() {
-  const placeholders = [];
-  for (let i = 0; i < 20; i++) {
-    placeholders.push(`<div class="movie-card--placeholder">
-      <h3 class="movie-card--placeholder__title">Movie Poster Placeholder</h3>
-    </div>`);
-  }
-  movieListContainer.innerHTML = placeholders.join(' ');
 }
