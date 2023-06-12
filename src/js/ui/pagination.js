@@ -3,9 +3,10 @@ import { renderMoviePlaceholders } from './noApi';
 import { axiosGetData } from '../apirest/axiosGetData';
 import { renderMovieList } from './cardgen';
 
-const header = {};
-const parameters = {};
-const moviesContainer = {};
+let header = {};
+let parameters = {};
+let moviesContainer = {};
+let paginationContainer = {};
 
 //const header = { ...defaultHeaderGet, ...searchMovieUrl };
 //const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
@@ -21,19 +22,11 @@ export function setPagination({
   header = headerRef;
   parameters = parametersRef;
   moviesContainer = movieListContainer;
-  console.log('kuki');
-  console.log(
-    headerRef,
-    parametersRef,
-    movieListContainer,
-    paginationContainerRef,
-    currentPageRef,
-    totalPagesRef,
-  );
-  renderPaginationButtons({
-    paginationContainer: paginationContainerRef,
-    currentPage: currentPageRef,
-    totalPages: totalPagesRef,
+  paginationContainer = paginationContainerRef;
+  renderPaginationButtons(currentPageRef, totalPagesRef);
+  window.scrollBy({
+    top: -document.body.offsetHeight,
+    behavior: 'smooth',
   });
 }
 
@@ -52,7 +45,11 @@ async function fetchMovies(page) {
     moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
     renderMoviePlaceholders(moviesContainer);
     renderMovieList(moviesContainer, movies.results);
-    renderPaginationButtons({ currentPage: currentPageLocal, totalPages: totalPagesLocal });
+    renderPaginationButtons(currentPageLocal, totalPagesLocal);
+    window.scrollBy({
+      top: -document.body.offsetHeight,
+      behavior: 'smooth',
+    });
 
     // Ukrywamy notyfikację po pobraniu filmów
     Notiflix.Loading.remove();
@@ -65,7 +62,7 @@ async function fetchMovies(page) {
   }
 }
 
-function renderPaginationButtons({ paginationContainer, currentPage, totalPages }) {
+function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
   const visibleButtons = 7;

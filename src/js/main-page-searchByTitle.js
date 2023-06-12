@@ -41,14 +41,6 @@ searchForm.addEventListener('submit', async event => {
     clearMovieList();
     renderMoviePlaceholders(movieListContainer);
     renderMovieList(movieListContainer, movies.results);
-    console.log(
-      header,
-      parameters,
-      movieListContainer,
-      paginationContainer,
-      movies.page,
-      movies.total_pages,
-    );
     setPagination({
       headerRef: header,
       parametersRef: parameters,

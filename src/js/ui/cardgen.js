@@ -1,12 +1,18 @@
 import { axiosGetData } from '../apirest/axiosGetData';
-import { defaultHeaderGet, genresUrl, genresUrlParams } from '../config/stdquery';
+import {
+  defaultHeaderGet,
+  genresUrl,
+  genresUrlParams,
+  trailerUrl,
+  trailerParams,
+} from '../config/stdquery';
 import { apikeyTMDB } from '../config/apikey';
 
 export async function renderMovieList(movieListContainer, movieList) {
-  const genres = await getGenres();
-  const markup = movieList
-    .map(movie => {
-      return `
+  const genres = await fetchGenres();
+  const movieCards = movieList.map(async movie => {
+    const key = await getMovieTrailerKey(movie);
+    return `
      <div class="movie-card"> 
        <img class="movie-card__poster" 
          src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
@@ -35,14 +41,21 @@ export async function renderMovieList(movieListContainer, movieList) {
          movie.release_date,
        )}</li>
      </ul>
+     <button type="button" class="movie-card__trailer-button" 
+     data-trailer-key="${key}">Trailer
+<svg class="movie-card__trailer-icon" width="24px" height="24px" viewBox="0 0 32 32">
+</svg>
+</button>
     </div>
       `;
-    })
-    .join(' ');
-  movieListContainer.innerHTML = markup;
+  });
+  const markup = await Promise.all(movieCards);
+  movieListContainer.innerHTML = markup.join(' ');
+  activateTrailerButtons();
+  createTrailerButtonIcons();
 }
 
-async function getGenres() {
+async function fetchGenres() {
   const header = { ...defaultHeaderGet, ...genresUrl };
   const parameters = { ...genresUrlParams, api_key: apikeyTMDB };
   const genres = await axiosGetData(header, parameters);
@@ -69,4 +82,53 @@ function getGenresNames(genres, genre_ids) {
     filteredGenres = genresList;
   }
   return filteredGenres.join(', ');
+}
+
+async function getMovieTrailerKey(movie) {
+  const header = { ...defaultHeaderGet, ...trailerUrl };
+  header.url = `${movie.id}/videos`;
+  const parameters = { ...trailerParams, api_key: apikeyTMDB };
+  const trailers = await axiosGetData(header, parameters);
+  const trailer = trailers.data.results.find(
+    trailer => trailer.official && trailer.type == 'Trailer',
+  );
+  return trailer != undefined ? trailer.key : '';
+}
+
+function activateTrailerButtons() {
+  const trailerButtons = document.querySelectorAll('.movie-card__trailer-button');
+  trailerButtons.forEach(trailerButton => {
+    trailerButton.onclick = function (event) {
+      event.preventDefault();
+      showTrailer(trailerButton.dataset.trailerKey);
+    };
+  });
+}
+
+function createTrailerButtonIcons() {
+  const svgs = document.querySelectorAll('.movie-card__trailer-icon');
+  for (const svg of svgs) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'm6 4 20 12L6 28z');
+    svg.appendChild(path);
+  }
+}
+
+function showTrailer(key) {
+  loadTrailer(key);
+  showTrailerModal();
+}
+
+function loadTrailer(key) {
+  const iframe = document.querySelector('#youtube-player');
+  iframe.src = `https://www.youtube.com/embed/${key}`;
+}
+
+function showTrailerModal() {
+  const backdrop = document.querySelector('.trailer-backdrop');
+  backdrop.classList.remove('is-hidden');
+  backdrop.onclick = function () {
+    backdrop.classList.add('is-hidden');
+    iframe.src = '';
+  };
 }

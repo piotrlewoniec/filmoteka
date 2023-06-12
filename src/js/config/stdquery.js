@@ -11,6 +11,15 @@ export const genresUrlParams = {
   language: 'en',
 };
 
+export const trailerUrl = {
+  baseURL: 'https://api.themoviedb.org/3/movie/',
+  url: '',
+};
+
+export const trailerParams = {
+  language: 'en-US',
+};
+
 export const trendingMovieTOP20Url = {
   baseURL: 'https://api.themoviedb.org/3/trending/movie/day',
 };
