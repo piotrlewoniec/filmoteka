@@ -115,16 +115,16 @@ function createTrailerButtonIcons() {
 }
 
 function showTrailer(key) {
-  loadTrailer(key);
-  showTrailerModal();
+  const iframe = document.querySelector('#youtube-player');
+  loadTrailer(key, iframe);
+  showTrailerModal(iframe);
 }
 
-function loadTrailer(key) {
-  const iframe = document.querySelector('#youtube-player');
+function loadTrailer(key, iframe) {
   iframe.src = `https://www.youtube.com/embed/${key}`;
 }
 
-function showTrailerModal() {
+function showTrailerModal(iframe) {
   const backdrop = document.querySelector('.trailer-backdrop');
   backdrop.classList.remove('is-hidden');
   backdrop.onclick = function () {
