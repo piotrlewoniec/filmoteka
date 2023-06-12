@@ -19,6 +19,7 @@
     &:focus,
     &:hover {
       border: 2px solid var.$active-color;
+      cursor: pointer;
     }
   }
   &__box {
@@ -64,10 +65,6 @@
   animation-duration: 1000ms;
   animation-direction: reverse;
   animation-timing-function: linear;
-
-  // @include desktop {
-  //   width: 530px;
-  // }
 }
 
 .button-close {
@@ -112,33 +109,3 @@
     padding: 2px;
   }
 }
-// // Positioning
-// position: absolute;
-// top: 0;
-// right: 0;
-// bottom: 0;
-// left: 0;
-// z-index: 100;
-
-// // Box model
-// display: flex;
-// flex-direction: column;
-// justify-content: center;
-// align-items: center;
-// width: 100px;
-// height: 100px;
-
-// // Typography
-// font: normal 14px "Helvetica Neue", sans-serif;
-// line-height: 1.5;
-// color: #333;
-// text-align: center;
-// text-decoration: underline;
-
-// // Visual
-// background-color: #f5f5f5;
-// border: 1px solid #e5e5e5;
-// border-radius: 3px;
-
-// // Misc
-// opacity: 1;
