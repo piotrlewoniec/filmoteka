@@ -75,13 +75,11 @@
   height: 30px;
   border: var.$accent-color;
   cursor: pointer;
-  border-radius: 50px;
   &__icon {
     padding: 6px;
     margin: 0;
     fill: var.$accent-color;
     background-color: var.$background-color-darker;
-    border-radius: 50%;
   }
 }
 @keyframes aboutModalClose {
