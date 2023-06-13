@@ -26,6 +26,33 @@ const mvmylib = [
   { movieid: 385687, watched: true, queue: false },
   { movieid: 569094, watched: true, queue: false },
   { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
+  { movieid: 385687, watched: true, queue: false },
+  { movieid: 569094, watched: true, queue: false },
+  { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
+  { movieid: 385687, watched: true, queue: false },
+  { movieid: 569094, watched: true, queue: false },
+  { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
+  { movieid: 385687, watched: true, queue: false },
+  { movieid: 569094, watched: true, queue: false },
+  { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
+  { movieid: 385687, watched: true, queue: false },
+  { movieid: 569094, watched: true, queue: false },
+  { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
+  { movieid: 385687, watched: true, queue: false },
+  { movieid: 569094, watched: true, queue: false },
+  { movieid: 667538, watched: true, queue: false },
+  { movieid: 562094, watched: true, queue: false },
+
   { movieid: 1010581, watched: false, queue: true },
   { movieid: 298618, watched: false, queue: true },
   { movieid: 502356, watched: false, queue: true },
@@ -41,6 +68,10 @@ async function loadFromStorage(movieInLib) {
       mvmylibToDisplay = mvmylibLocal.filter(movie => movie.watched);
     } else if (movieInLib === 'queue') {
       mvmylibToDisplay = mvmylibLocal.filter(movie => movie.queue);
+    }
+    if (mvmylibToDisplay.length === 0) {
+      renderMoviePlaceholder(movieListContainer);
+      return;
     }
     const arrayOfPromises = mvmylibToDisplay.map(async movie => {
       const header = { ...defaultHeaderGet, ...searchMovieDetailsUrl };
