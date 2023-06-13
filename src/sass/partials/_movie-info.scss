@@ -52,9 +52,13 @@
   pointer-events: none;
   transform: translateY(0%) scale(0);
 }
+// .button-close {
+//   padding: 8px;
+// }
 .button-close .button-close__info {
   fill: red;
   color: blue;
-  background-color: var.$background-color-lighter;
+  background-color: red;
+  // background-color: var.$background-color-lighter;
   stroke: red;
 }

@@ -12,9 +12,9 @@ function showMovieModal(event) {
   movieWindowContent.insertAdjacentHTML(
     'beforeend',
     `<div class="movie-modal__info">
-      <button data-modal-close class="button-close">
+      <button class="button-close">
       <svg class="button-close__info" width="30px" height="30px">
-      <use href="./images/decorations/icons.svg#icon-heart"></use>
+      <use href="./images/decorations/icons.svg#icon-close"></use>
       </svg>
       </button>
       <p>Tu pojawią się informacje o filmie :)</p> </div>`,
