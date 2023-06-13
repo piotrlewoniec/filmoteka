@@ -17,7 +17,7 @@
   &-modal {
     max-height: 50vw;
     max-width: 90vw;
-    padding: 20px;
+    padding: 40px;
     color: var.$accent-color;
     fill: var.$accent-color;
     background-color: var.$background-color-lighter;
@@ -61,4 +61,7 @@
   background-color: red;
   // background-color: var.$background-color-lighter;
   stroke: red;
+}
+.movie-info__container {
+  display: flex;
 }
