@@ -11,7 +11,12 @@ function showMovieModal(event) {
   backdrop.classList.remove('is-hidden');
   movieWindowContent.insertAdjacentHTML(
     'beforeend',
-    `<div>
+    `<div class="movie-modal__info">
+    <button data-modal-close class="button-close">
+    <svg class="button-close__info" width="30px" height="30px">
+      <use href="./images/decorations/icons.svg#icon-heart"></use>
+    </svg>
+  </button>
 <p>informacje o filmie - DELEGACJA</p> </div>`,
   );
   backdrop.onclick = function () {

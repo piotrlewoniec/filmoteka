@@ -17,7 +17,10 @@
   &-modal {
     max-height: 50vw;
     max-width: 90vw;
-    background-color: aqua;
+    padding: 20px;
+    color: var.$accent-color;
+    fill: var.$accent-color;
+    background-color: var.$background-color-lighter;
     transform: translateY(50%) scale(1);
     @include mq.tablet {
       max-height: 45vw;
@@ -26,6 +29,18 @@
     @include mq.desktop {
       max-height: 28vw;
       max-width: 49vw;
+    }
+    &__info {
+      width: 280px;
+      height: 940px;
+      @include mq.tablet {
+        width: 704px;
+        height: 552px;
+      }
+      @include mq.desktop {
+        width: 806px;
+        height: 558px;
+      }
     }
   }
 }
@@ -36,4 +51,10 @@
   visibility: hidden;
   pointer-events: none;
   transform: translateY(0%) scale(0);
+}
+.button-close .button-close__info {
+  fill: red;
+  color: blue;
+  background-color: var.$background-color-lighter;
+  stroke: red;
 }
