@@ -1,52 +1,68 @@
-import axios from 'axios';
 import Notiflix from 'notiflix';
+import { renderMoviePlaceholders } from './noApi';
+import { axiosGetData } from '../apirest/axiosGetData';
+import { renderMovieList } from './cardgen';
 
-const moviesContainer = document.getElementById('movies');
-const paginationContainer = document.querySelector('.pagination');
-let currentPage = 1;
-let totalPages = 0;
+let header = {};
+let parameters = {};
+let moviesContainer = {};
+let paginationContainer = {};
 
-function fetchMovies(page) {
-  // Dodajemy notyfikację przed pobraniem filmów
-  Notiflix.Loading.pulse('Pobieranie filmów...');
+//const header = { ...defaultHeaderGet, ...searchMovieUrl };
+//const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
 
-  axios
-    .get('https://api.themoviedb.org/3/movie/changes', {
-      params: {
-        page: page,
-        api_key: '201a0d25c5ee0bd75c195a2bbfd9dec7',
-      },
-    })
-    .then(function (response) {
-      moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
-
-      response.data.results.forEach(function (movie) {
-        const movieElement = document.createElement('div');
-        movieElement.textContent = movie.title;
-        moviesContainer.appendChild(movieElement);
-      });
-
-      // Aktualizacja informacji o stronach
-      currentPage = response.data.page;
-      totalPages = response.data.total_pages;
-
-      renderPaginationButtons();
-
-      // Ukrywamy notyfikację po pobraniu filmów
-      Notiflix.Loading.remove();
-    })
-    .catch(function (error) {
-      console.error(error);
-
-      // Wyświetlamy notyfikację o błędzie
-      Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
-
-      // Ukrywamy notyfikację po błędzie
-      Notiflix.Loading.remove();
-    });
+export function setPagination({
+  headerRef,
+  parametersRef,
+  movieListContainer,
+  paginationContainerRef,
+  currentPageRef,
+  totalPagesRef,
+}) {
+  header = headerRef;
+  parameters = parametersRef;
+  moviesContainer = movieListContainer;
+  paginationContainer = paginationContainerRef;
+  renderPaginationButtons(currentPageRef, totalPagesRef);
+  window.scrollBy({
+    top: -document.body.offsetHeight,
+    behavior: 'smooth',
+  });
 }
 
-function renderPaginationButtons() {
+async function fetchMovies(page) {
+  // Dodajemy notyfikację przed pobraniem filmów
+  Notiflix.Loading.pulse('Pobieranie filmów...');
+  let currentPageLocal, totalPagesLocal;
+  try {
+    parameters.page = page;
+    const serverData = await axiosGetData(header, parameters);
+    const movies = serverData.data;
+    currentPageLocal = movies.page;
+    totalPagesLocal = movies.total_pages;
+    // movies.total_results
+
+    moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
+    renderMoviePlaceholders(moviesContainer);
+    renderMovieList(moviesContainer, movies.results);
+    renderPaginationButtons(currentPageLocal, totalPagesLocal);
+    window.scrollBy({
+      top: -document.body.offsetHeight,
+      behavior: 'smooth',
+    });
+
+    // Ukrywamy notyfikację po pobraniu filmów
+    Notiflix.Loading.remove();
+  } catch (error) {
+    // Wyświetlamy notyfikację o błędzie
+    Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
+
+    // Ukrywamy notyfikację po błędzie
+    Notiflix.Loading.remove();
+  }
+}
+
+function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
   const visibleButtons = 7;
@@ -143,5 +159,3 @@ function createDots() {
   dots.classList.add('dots');
   return dots;
 }
-
-fetchMovies(currentPage);
