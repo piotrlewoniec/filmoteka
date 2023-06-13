@@ -9,6 +9,7 @@ import {
 import { apikeyTMDB } from '../config/apikey';
 
 export async function renderMovieList(movieListContainer, movieList) {
+  console.log(movieList);
   const genres = await fetchGenres();
   const movieCards = movieList.map(async movie => {
     const key = await getMovieTrailerKey(movie);
