@@ -12,14 +12,15 @@ function showMovieModal(event) {
   movieWindowContent.insertAdjacentHTML(
     'beforeend',
     `<div class="movie-modal__info">
-    <button data-modal-close class="button-close">
-    <svg class="button-close__info" width="30px" height="30px">
+      <button data-modal-close class="button-close">
+      <svg class="button-close__info" width="30px" height="30px">
       <use href="./images/decorations/icons.svg#icon-heart"></use>
-    </svg>
-  </button>
-<p>informacje o filmie - DELEGACJA</p> </div>`,
+      </svg>
+      </button>
+      <p>Tu pojawią się informacje o filmie :)</p> </div>`,
   );
-  backdrop.onclick = function () {
+  const closeModalBtn = document.querySelector('.button-close');
+  closeModalBtn.onclick = function () {
     backdrop.classList.add('is-hidden');
     movieWindowContent.innerHTML = '';
   };
