@@ -27,7 +27,13 @@ searchForm.addEventListener('submit', async event => {
 
   try {
     const header = { ...defaultHeaderGet, ...searchMovieUrl };
-    const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
+    const parameters = {
+      ...searchMovieParams,
+      api_key: apikeyTMDB,
+      include_adult: false,
+      query: searchQuery,
+      page: 1,
+    };
     const serverData = await axiosGetData(header, parameters);
     const movies = serverData.data;
     // movies.page
