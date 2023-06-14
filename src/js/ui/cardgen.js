@@ -20,6 +20,7 @@ export async function renderMovieList(movieListContainer, movieList) {
          loading="lazy" 
          width="280" 
          height="398" 
+         data-movieid="${movie.id}"
          srcset="
            https://image.tmdb.org/t/p/w342${movie.poster_path} 280w,
            https://image.tmdb.org/t/p/w780${movie.poster_path} 560w,
@@ -34,12 +35,12 @@ export async function renderMovieList(movieListContainer, movieList) {
          sizes="(min-width: 1280px) 395px, (min-width: 768px) 336px, 280px"
       />
      <ul class="movie-card__info">
-       <li class="movie-card__title">${truncateTitle(movie.title)}</li>
-       <li class="movie-card__genre">${getGenresNamesAndYear(
-         genres,
-         movie.genre_ids,
-         movie.release_date,
-       )}</li>
+       <li class="movie-card__title" data-movieid="${movie.id}" >${truncateTitle(movie.title)}</li>
+       <li class="movie-card__genre" data-movieid="${movie.id}" >${getGenresNamesAndYear(
+      genres,
+      movie.genre_ids,
+      movie.release_date,
+    )}</li>
      </ul>
      <button type="button" class="movie-card__trailer-button" 
      data-trailer-key="${key}">Trailer
