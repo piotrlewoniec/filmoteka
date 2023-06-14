@@ -30,8 +30,8 @@ export function setPagination({
   });
 }
 
+// Dodajemy notyfikację przed pobraniem filmów
 async function fetchMovies(page) {
-  // Dodajemy notyfikację przed pobraniem filmów
   Notiflix.Loading.pulse('Pobieranie filmów...');
   let currentPageLocal, totalPagesLocal;
   try {
@@ -40,7 +40,6 @@ async function fetchMovies(page) {
     const movies = serverData.data;
     currentPageLocal = movies.page;
     totalPagesLocal = movies.total_pages;
-    // movies.total_results
 
     moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
     renderMoviePlaceholders(moviesContainer);
@@ -74,7 +73,13 @@ function renderPaginationButtons(currentPage, totalPages) {
   }
 
   paginationContainer.appendChild(
-    createNavigationButton('<', currentPage - 1, currentPage > 1, currentPage !== 1, 'btn-arrow'),
+    createNavigationButton(
+      getArrowSvg('left'),
+      currentPage - 1,
+      currentPage > 1,
+      currentPage !== 1,
+      'btn-arrow',
+    ),
   );
 
   if (startPage > 1) {
@@ -105,7 +110,7 @@ function renderPaginationButtons(currentPage, totalPages) {
 
   paginationContainer.appendChild(
     createNavigationButton(
-      '>',
+      getArrowSvg('right'),
       currentPage + 1,
       currentPage < totalPages,
       currentPage !== totalPages,
@@ -142,7 +147,7 @@ function createPaginationButton(page) {
 
 function createNavigationButton(text, page, enabled, visible, className) {
   const button = document.createElement('button');
-  button.textContent = text;
+  button.innerHTML = text;
   button.disabled = !enabled;
   button.style.visibility = visible ? 'visible' : 'hidden';
   button.setAttribute('data-page', page);
@@ -158,4 +163,29 @@ function createDots() {
   dots.textContent = '...';
   dots.classList.add('dots');
   return dots;
+}
+
+function getArrowSvg(direction) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  // svg.setAttribute('class', 'xx');
+  svg.setAttribute('width', '16px');
+  svg.setAttribute('height', '16px');
+  svg.setAttribute('viewBox', '0 0 32 32');
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  if (direction === 'left') {
+    path.setAttribute(
+      'd',
+      'M12.586 27.414l-10-10c-0.781-0.781-0.781-2.047 0-2.828l10-10c0.781-0.781 2.047-0.781 2.828 0s0.781 2.047 0 2.828l-6.586 6.586h19.172c1.105 0 2 0.895 2 2s-0.895 2-2 2h-19.172l6.586 6.586c0.39 0.39 0.586 0.902 0.586 1.414s-0.195 1.024-0.586 1.414c-0.781 0.781-2.047 0.781-2.828 0z',
+    );
+  } else if (direction === 'right') {
+    path.setAttribute(
+      'd',
+      'M19.414 27.414l10-10c0.781-0.781 0.781-2.047 0-2.828l-10-10c-0.781-0.781-2.047-0.781-2.828 0s-0.781 2.047 0 2.828l6.586 6.586h-19.172c-1.105 0-2 0.895-2 2s0.895 2 2 2h19.172l-6.586 6.586c-0.39 0.39-0.586 0.902-0.586 1.414s0.195 1.024 0.586 1.414c0.781 0.781 2.047 0.781 2.828 0z',
+    );
+  }
+
+  svg.appendChild(path);
+
+  return svg.outerHTML;
 }
