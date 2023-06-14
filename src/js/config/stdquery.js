@@ -32,7 +32,7 @@ export const searchMovieUrl = {
 };
 export const searchMovieParams = {
   language: 'en-US',
-  include_adult: true,
+  include_adult: false,
 };
 
 export const searchMovieDetailsUrl = {
