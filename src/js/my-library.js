@@ -86,6 +86,7 @@ async function loadFromStorage(movieInLib) {
     }
     const movies = serverData.map(data => data.data);
     renderMovieList(movieListContainer, movies);
+    console.log(movies);
     /*
     setPagination({
       headerRef: data.header,
