@@ -86,6 +86,16 @@ async function loadFromStorage(movieInLib) {
     }
     const movies = serverData.map(data => data.data);
     renderMovieList(movieListContainer, movies);
+    /*
+    setPagination({
+      headerRef: data.header,
+      parametersRef: data.parameters,
+      movieListContainer: movieListContainer,
+      paginationContainerRef: paginationContainer,
+      currentPageRef: data.movies.data.page,
+      totalPagesRef: data.movies.data.total_pages,
+    });
+    */
   }
 }
 
