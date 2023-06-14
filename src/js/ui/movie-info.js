@@ -6,7 +6,6 @@ function showMovieModal(event) {
   if (event.target.type === 'button') {
     return;
   }
-  console.log(event);
   const backdrop = document.querySelector('.movie-backdrop');
   const movieWindowContent = document.querySelector('.movie-modal');
   backdrop.classList.remove('is-hidden');
