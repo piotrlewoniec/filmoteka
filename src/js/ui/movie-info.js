@@ -1,11 +1,24 @@
+import { axiosGetData } from '../apirest/axiosGetData';
+import {
+  defaultHeaderGet,
+  searchMovieDetailsUrl,
+  searchMovieDetailsParams,
+} from '../config/stdquery';
+import { apikeyTMDB } from '../config/apikey';
+
 const movieListContainer = document.querySelector('.movie-list-container');
 
 movieListContainer.addEventListener('click', showMovieModal);
 
-function showMovieModal(event) {
+async function showMovieModal(event) {
   if (event.target.type === 'button') {
     return;
   }
+  const header = { ...defaultHeaderGet, ...searchMovieDetailsUrl };
+  header.url = `${event.target.dataset.movieid}`;
+  const parameters = { ...searchMovieDetailsParams, api_key: apikeyTMDB };
+  const response = await axiosGetData(header, parameters);
+  console.log(response);
   const backdrop = document.querySelector('.movie-backdrop');
   const movieWindowContent = document.querySelector('.movie-modal');
   backdrop.classList.remove('is-hidden');

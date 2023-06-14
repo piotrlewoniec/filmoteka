@@ -4,7 +4,7 @@
   "description": "",
   "homepage": "https://github.com/piotrlewoniec/filmoteka",
   "scripts": {
-    "dev": "parcel src/*.html",
+    "dev": "parcel --no-cache src/*.html",
     "build": "parcel build src/*.html --public-url /filmoteka/"
   },
   "repository": {
