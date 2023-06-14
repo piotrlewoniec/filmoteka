@@ -52,15 +52,14 @@
   pointer-events: none;
   transform: translateY(0%) scale(0);
 }
-// .button-close {
-//   padding: 8px;
-// }
+.button-close {
+  margin-top: 8px;
+  margin-right: 8px;
+}
 .button-close .button-close__info {
-  fill: red;
-  color: blue;
-  background-color: red;
-  // background-color: var.$background-color-lighter;
-  stroke: red;
+  stroke: black;
+  stroke-width: 2px;
+  background-color: var.$background-color-lighter;
 }
 .movie-info__container {
   display: flex;

@@ -13,9 +13,8 @@ function showMovieModal(event) {
     'beforeend',
     `<div class="movie-modal__info">
       <button class="button-close">
-      <svg class="button-close__info" width="30px" height="30px">
-      <use href="./images/decorations/icons.svg#icon-close"></use>
-      </svg>
+      <svg class="button-close__info" width="30px" height="30px" viewBox="0 0 32 32">
+            </svg>
       </button>
       <div class="movie-info__container">
       <img class="" 
@@ -50,6 +49,7 @@ function showMovieModal(event) {
       </div>
       </div>`,
   );
+  createModalButtonIcon();
   const closeModalBtn = document.querySelector('.button-close');
   closeModalBtn.onclick = function () {
     backdrop.classList.add('is-hidden');
@@ -57,6 +57,13 @@ function showMovieModal(event) {
   };
 }
 
+function createModalButtonIcon() {
+  const svg = document.querySelector('.button-close__info');
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M8 8L22 22, M8 22L22 8');
+  svg.appendChild(path);
+}
 // const movieCards = document.querySelectorAll('.movie-card');
 // for (const movieCard of movieCards) {
 //   movieCard.addEventListener('click', event => showMovieModal(event));
