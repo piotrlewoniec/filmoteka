@@ -1,17 +1,11 @@
 import { localStorageSave, localStorageLoad } from './system/localstorage';
+import { localStorageLoadMovies } from './librarylocal/librarylocal';
 import { renderMoviePlaceholder } from './ui/noApi';
-import { axiosGetData } from './apirest/axiosGetData';
-import {
-  defaultHeaderGet,
-  searchMovieDetailsUrl,
-  searchMovieDetailsParams,
-} from './config/stdquery';
-import { apikeyTMDB } from './config/apikey';
-import { renderMovieList } from './ui/cardgen';
 import { setPagination } from './ui/pagination';
 
+const libraryLocalName = 'mvmylib';
 import { mvmylibdemo } from './config/mvmylibdemo';
-localStorageSave('mvmylib', mvmylibdemo);
+//localStorageSave(libraryLocalName, mvmylibdemo);
 
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
@@ -19,40 +13,19 @@ const btnWatched = document.querySelector('#watched');
 const btnQueue = document.querySelector('#queue');
 
 btnWatched.addEventListener('click', () => {
-  loadFromStorage('watched');
+  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer);
 });
 btnQueue.addEventListener('click', () => {
-  loadFromStorage('queue');
+  localStorageLoadMovies(libraryLocalName, 'queue', movieListContainer);
 });
 
-async function loadFromStorage(movieInLib) {
-  if ('mvmylib' in localStorage) {
-    const mvmylibLocal = localStorageLoad('mvmylib');
-    let mvmylibToDisplay = [];
-    if (movieInLib === 'watched') {
-      mvmylibToDisplay = mvmylibLocal.filter(movie => movie.watched);
-    } else if (movieInLib === 'queue') {
-      mvmylibToDisplay = mvmylibLocal.filter(movie => movie.queue);
-    }
-    if (mvmylibToDisplay.length === 0) {
-      renderMoviePlaceholder(movieListContainer);
-      return;
-    }
-    const arrayOfPromises = mvmylibToDisplay.map(async movie => {
-      const header = { ...defaultHeaderGet, ...searchMovieDetailsUrl };
-      header.url = `${movie.movieid}`;
-      const parameters = { ...searchMovieDetailsParams, api_key: apikeyTMDB };
-      const response = await axiosGetData(header, parameters);
-      return response;
-    });
-    let serverData = await Promise.all(arrayOfPromises);
-    for (let element of serverData) {
-      element.data.genre_ids = element.data.genres.map(genre => genre.id);
-    }
-    const movies = serverData.map(data => data.data);
-    renderMovieList(movieListContainer, movies);
-    // console.log(movies);
-    /*
+if (libraryLocalName in localStorage) {
+  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer);
+} else {
+  renderMoviePlaceholder(movieListContainer);
+}
+
+/*
     setPagination({
       headerRef: data.header,
       parametersRef: data.parameters,
@@ -62,11 +35,21 @@ async function loadFromStorage(movieInLib) {
       totalPagesRef: data.movies.data.total_pages,
     });
     */
-  }
+
+/*
+    const maxMoviesPerPage = 20;
+    mvmylibToDisplay
+0..19  20 
+20..39 20 
+40...59 20
+tab.length/20 
+Math.trunc(
+if (mvmylibToDisplay.length <=20 ){
+renderMovieList(movieListContainer, movies);
+} else {
+
 }
 
-if ('mvmylib' in localStorage) {
-  loadFromStorage('watched');
-} else {
-  renderMoviePlaceholder(movieListContainer);
-}
+
+
+    */
