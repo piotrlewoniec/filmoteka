@@ -24,44 +24,47 @@ async function showMovieModal(event) {
   backdrop.classList.remove('is-hidden');
   movieWindowContent.insertAdjacentHTML(
     'beforeend',
-    `<div class="movie-modal__info">
-      <button class="button-close">
+    `<button class="button-close">
       <svg class="button-close__info" width="30px" height="30px" viewBox="0 0 32 32">
             </svg>
       </button>
-      <div class="movie-info__container">
-      <img class="" 
-         src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
-         alt="${response.data.title}" 
-         loading="lazy" 
-         width="240" 
-         height="357" 
-     
-         sizes="(min-width: 1280px) 395px, (min-width: 768px) 336px, 280px"
-      />
-      <div class="movie-info__data"
-      <h2 class="movie-info__title">${response.data.title}<h2>
-      <ul class="movie-info">
-        <li class="movie-info__vote">Vote / Votes ${response.data.vote_average} / ${response.data.vote_count}</li>
-        <li class="movie-info__popularity">Popularity ${response.data.popularity}</li>
-        <li class="movie-info__original">Original Title ${response.data.original_title}</li>
-        <li class="movie-info__genre">Genre </li>
-      </ul>
-      <p class="movie-info__about">
-      <h3>ABOUT</h3>
-       ${response.data.overview}</p>
-
-      <ul class="movie-info__buttons">
-        <li>
-        <button class="watched-button" type="button">Add to Watched</button>
-        </li>
-        <li>
-        <button class="queue-button" type="button">Add to Queue</button>
-        </li>
-      </ul>
-      </div>
-      </div>
-      </div>`,
+      <img class="movie-info__img" src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
+    alt="${response.data.title}" loading="lazy" width="240" height="357"
+    sizes="(min-width: 1280px) 395px, (min-width: 768px) 264px, 280px" />
+<div class="movie-info__data">
+    <h2 class="movie-info__title">${response.data.title}<h2>
+            <div class="movie-info__details">
+                <ul class="movie-info__params">
+                    <li class="movie-info__params-item">Vote / Votes</li>
+                    <li class="movie-info__params-item">Popularity</li>
+                    <li class="movie-info__params-item">Original Title</li>
+                    <li class="movie-info__params-item">Genre</li>
+                </ul>
+                <ul class="movie-info__results">
+                    <li class="movie-info__results-item"><span class="movie-info__results-item--vote">${parseFloat(
+                      response.data.vote_average.toFixed(1),
+                    )}</span> / <span class="movie-info__results-item--count">${
+      response.data.vote_count
+    }</span></li>
+                    <li class="movie-info__results-item">${response.data.popularity}</li>
+                    <li class="movie-info__results-item">${response.data.original_title}</li>
+                    <li class="movie-info__results-item">${response.data.genres
+                      .map(genre => genre.name)
+                      .join(', ')}</li>
+                </ul>
+            </div>
+            <h3 class="movie-info__headline">ABOUT</h3>
+            <p class="movie-info__about">${response.data.overview}</p>
+            <ul class="movie-info__buttons">
+                <li>
+                    <button class="movie-info__btn movie-info__btn--watched" type="button">Add to Watched</button>
+                </li>
+                <li>
+                    <button class="movie-info__btn" type="button">Add to Queue</button>
+                </li>
+            </ul>
+</div>
+      `,
   );
   createModalButtonIcon();
   const closeModalBtn = document.querySelector('.button-close');
