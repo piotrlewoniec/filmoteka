@@ -23,6 +23,7 @@ export function setPagination({
   parameters = parametersRef;
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
+  paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
   renderPaginationButtons(currentPageRef, totalPagesRef);
   window.scrollBy({
     top: -document.body.offsetHeight,
@@ -64,7 +65,9 @@ async function fetchMovies(page) {
 function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
-  const visibleButtons = 7;
+  const isMobile = window.innerWidth <= 768; // Sprawdzenie, czy jest to ekran mobilny
+
+  const visibleButtons = isMobile ? 5 : 7; // Liczba widocznych przycisków (5 na ekranach mobilnych, 7 na pozostałych)
   let startPage = Math.max(currentPage - Math.floor(visibleButtons / 2), 1);
   let endPage = Math.min(startPage + visibleButtons - 1, totalPages);
 
@@ -72,6 +75,7 @@ function renderPaginationButtons(currentPage, totalPages) {
     startPage = Math.max(endPage - visibleButtons + 1, 1);
   }
 
+  // Dodawanie przycisków strzałek w zależności od aktualnej strony
   paginationContainer.appendChild(
     createNavigationButton(
       getArrowSvg('left'),
@@ -84,7 +88,8 @@ function renderPaginationButtons(currentPage, totalPages) {
 
   if (startPage > 1) {
     paginationContainer.appendChild(createPaginationButton(1));
-    if (startPage > 2) {
+    if (startPage > 2 && !isMobile) {
+      // Dodawanie kropek tylko na większych ekranach
       paginationContainer.appendChild(createDots());
     }
   }
@@ -101,7 +106,8 @@ function renderPaginationButtons(currentPage, totalPages) {
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) {
+    if (endPage < totalPages - 1 && !isMobile) {
+      // Dodawanie kropek tylko na większych ekranach
       paginationContainer.appendChild(createDots());
     }
 
