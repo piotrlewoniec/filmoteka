@@ -1,0 +1,103 @@
+import { localStorageSave, localStorageLoad } from '../system/localstorage';
+import { axiosGetData } from '../apirest/axiosGetData';
+import {
+  defaultHeaderGet,
+  searchMovieDetailsUrl,
+  searchMovieDetailsParams,
+} from '../config/stdquery';
+import { apikeyTMDB } from '../config/apikey';
+import { renderMovieList } from '../ui/cardgen';
+import { renderMoviePlaceholder } from '../ui/noApi';
+
+function localStorageCreate(libraryName) {
+  localStorageSave(libraryName, []);
+}
+
+export function localStorageGetMovieStatus(libraryName, movieid) {
+  if (libraryName in localStorage) {
+    const libraryLocal = localStorageLoad(libraryName);
+    const movie = libraryLocal.find(movie => movie.movieid === movieid);
+    return movie;
+  }
+}
+
+export function localStorageAddMovie(libraryName, movieid, setStatus) {
+  if (libraryName in localStorage === false) {
+    localStorageCreate(libraryName);
+  }
+  if (libraryName in localStorage) {
+    const libraryLocal = localStorageLoad(libraryName);
+    if (setStatus === 'watchedStatus') {
+      libraryLocal.push({ movieid: movieid, watched: true, queue: false });
+    } else if (setStatus === 'toWatchStatus') {
+      libraryLocal.push({ movieid: movieid, watched: false, queue: true });
+    }
+    localStorageSave(libraryName, libraryLocal);
+  }
+}
+
+export function localStorageRemoveMovie(libraryName, movieid) {
+  if (libraryName in localStorage) {
+    const libraryLocal = localStorageLoad(libraryName);
+    const elementIndex = libraryLocal.findIndex(element => element.movieid === movieid);
+    if (elementIndex > -1) {
+      libraryLocal.splice(elementIndex, 1);
+      localStorageSave(libraryName, libraryLocal);
+    }
+  }
+}
+
+export function localStorageUpdateMovie(libraryName, movieid, setStatus) {
+  if (libraryName in localStorage) {
+    const libraryLocal = localStorageLoad(libraryName);
+    const elementIndex = libraryLocal.findIndex(element => element.movieid === movieid);
+    if (elementIndex > -1) {
+      if (setStatus === 'watchedStatus') {
+        libraryLocal[elementIndex].watched = libraryLocal[elementIndex].watched ? false : true;
+        // libraryLocal.push({ movieid: movieid, watched: true, queue: false });
+      } else if (setStatus === 'toWatchStatus') {
+        libraryLocal[elementIndex].queue = libraryLocal[elementIndex].queue ? false : true;
+      }
+      localStorageSave(libraryName, libraryLocal);
+    }
+  }
+}
+
+export function localStorageLoadSelectedMovies(libraryName, movieStatus) {
+  if (libraryName in localStorage) {
+    const libraryLocal = localStorageLoad(libraryName);
+    let libraryLocalToDisplay = [];
+    if (movieStatus === 'watched') {
+      libraryLocalToDisplay = libraryLocal.filter(movie => movie.watched);
+    } else if (movieStatus === 'queue') {
+      libraryLocalToDisplay = libraryLocal.filter(movie => movie.queue);
+    }
+    return libraryLocalToDisplay;
+  } else return [];
+}
+
+export async function fetchMoviesDetails(moviesSelected) {
+  const arrayOfPromises = moviesSelected.map(async movie => {
+    const header = { ...defaultHeaderGet, ...searchMovieDetailsUrl };
+    header.url = `${movie.movieid}`;
+    const parameters = { ...searchMovieDetailsParams, api_key: apikeyTMDB };
+    const response = await axiosGetData(header, parameters);
+    return response;
+  });
+  let serverData = await Promise.all(arrayOfPromises);
+  for (let element of serverData) {
+    element.data.genre_ids = element.data.genres.map(genre => genre.id);
+  }
+  const moviesDetails = serverData.map(data => data.data);
+  return moviesDetails;
+}
+
+export async function localStorageLoadMovies(libraryName, movieStatus, movieListContainer) {
+  const moviesToDisplay = localStorageLoadSelectedMovies(libraryName, movieStatus);
+  if (moviesToDisplay.length === 0) {
+    renderMoviePlaceholder(movieListContainer);
+    return;
+  }
+  const movies = await fetchMoviesDetails(moviesToDisplay);
+  renderMovieList(movieListContainer, movies);
+}
