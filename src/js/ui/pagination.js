@@ -23,6 +23,7 @@ export function setPagination({
   parameters = parametersRef;
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
+  paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
   renderPaginationButtons(currentPageRef, totalPagesRef);
   window.scrollBy({
     top: -document.body.offsetHeight,
@@ -64,7 +65,9 @@ async function fetchMovies(page) {
 function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
-  const visibleButtons = 7;
+  const isMobile = window.innerWidth <= 768; // Warunek dla urządzeń mobilnych
+
+  const visibleButtons = isMobile ? 4 : 7; // Liczba widocznych przycisków
   let startPage = Math.max(currentPage - Math.floor(visibleButtons / 2), 1);
   let endPage = Math.min(startPage + visibleButtons - 1, totalPages);
 
@@ -84,12 +87,17 @@ function renderPaginationButtons(currentPage, totalPages) {
 
   if (startPage > 1) {
     paginationContainer.appendChild(createPaginationButton(1));
-    if (startPage > 2) {
+    if (startPage > 2 && !isMobile) {
       paginationContainer.appendChild(createDots());
     }
   }
 
   for (let i = startPage; i <= endPage; i++) {
+    if (isMobile) {
+      if (i === 100 || i > startPage + 3) continue; // Pominięcie przycisku 1000 oraz przycisków powyżej startPage + 3 na urządzeniach mobilnych
+    } else {
+      if (i === 1000) continue; // Pominięcie przycisku 1000 na nie-mobilnych urządzeniach
+    }
     const button = createPaginationButton(i);
     if (i === currentPage) {
       button.classList.add('active');
@@ -101,7 +109,7 @@ function renderPaginationButtons(currentPage, totalPages) {
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) {
+    if (endPage < totalPages - 1 && !isMobile) {
       paginationContainer.appendChild(createDots());
     }
 
