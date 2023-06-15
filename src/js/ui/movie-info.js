@@ -68,10 +68,10 @@ async function showMovieModal(event) {
               <p class="movie-info__about">${response.data.overview}</p>
               <ul class="movie-info__buttons">
                   <li>
-                      <button class="movie-info__btn movie-info__btn--watched" type="button">${btnWatchedCaption}</button>
+                      <button class="movie-info__btn movie-info__btn--watched" type="button" data-action="watched" >${btnWatchedCaption}</button>
                   </li>
                   <li>
-                      <button class="movie-info__btn" type="button">${btnToWatchCaption}</button>
+                      <button class="movie-info__btn" type="button" data-action="queue" >${btnToWatchCaption}</button>
                   </li>
               </ul>
   </div>
@@ -98,8 +98,8 @@ async function showMovieModal(event) {
     }
   };
 
-  const btnWatched = document.querySelector('.watched-button');
-  const btnToWatch = document.querySelector('.queue-button');
+  const btnWatched = document.querySelector("[data-action='watched']");
+  const btnToWatch = document.querySelector("[data-action='queue']");
 
   btnWatched.onclick = function () {
     if (btnWatched.innerText.toLowerCase() === 'add to watched') {
