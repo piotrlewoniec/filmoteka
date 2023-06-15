@@ -1,3 +1,11 @@
+import {
+  localStorageGetMovieStatus,
+  localStorageAddMovie,
+  localStorageRemoveMovie,
+  localStorageUpdateMovie,
+  localStorageLoadMovies,
+} from '../librarylocal/librarylocal';
+
 import { axiosGetData } from '../apirest/axiosGetData';
 import {
   defaultHeaderGet,
@@ -7,6 +15,8 @@ import {
 import { apikeyTMDB } from '../config/apikey';
 
 const movieListContainer = document.querySelector('.movie-list-container');
+
+const libraryLocalName = 'mvmylib';
 
 movieListContainer.addEventListener('click', showMovieModal);
 
@@ -18,9 +28,10 @@ async function showMovieModal(event) {
   header.url = `${event.target.dataset.movieid}`;
   const parameters = { ...searchMovieDetailsParams, api_key: apikeyTMDB };
   const response = await axiosGetData(header, parameters);
-  console.log(`${response.data.original_title}`);
   const backdrop = document.querySelector('.movie-backdrop');
   const movieWindowContent = document.querySelector('.movie-modal');
+  const btnWatchedCaption = setBtnName(libraryLocalName, response.data.id, 'watchedStatus');
+  const btnToWatchCaption = setBtnName(libraryLocalName, response.data.id, 'toWatchStatus');
   backdrop.classList.remove('is-hidden');
   movieWindowContent.insertAdjacentHTML(
     'beforeend',
@@ -52,11 +63,11 @@ async function showMovieModal(event) {
        ${response.data.overview}</p>
 
       <ul class="movie-info__buttons">
-        <li>
-        <button class="watched-button" type="button">Add to Watched</button>
+        <li> 
+        <button class="watched-button" type="button"> ${btnWatchedCaption}</button>
         </li>
         <li>
-        <button class="queue-button" type="button">Add to Queue</button>
+        <button class="queue-button" type="button">${btnToWatchCaption}</button>
         </li>
       </ul>
       </div>
@@ -67,8 +78,103 @@ async function showMovieModal(event) {
   const closeModalBtn = document.querySelector('.button-close');
   closeModalBtn.onclick = function () {
     backdrop.classList.add('is-hidden');
+    document.onkeydown = '';
     movieWindowContent.innerHTML = '';
   };
+
+  document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    let isEscape = false;
+    if ('key' in evt) {
+      isEscape = evt.key === 'Escape' || evt.key === 'Esc';
+    } else {
+      isEscape = evt.keyCode === 27;
+    }
+    if (isEscape) {
+      closeModalBtn.onclick();
+    }
+  };
+
+  const btnWatched = document.querySelector('.watched-button');
+  const btnToWatch = document.querySelector('.queue-button');
+
+  btnWatched.onclick = function () {
+    if (btnWatched.innerText.toLowerCase() === 'add to watched') {
+      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+      if (movie !== undefined) {
+        localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
+        btnWatched.innerText = 'Remove from Watched';
+      } else {
+        localStorageAddMovie(libraryLocalName, response.data.id, 'watchedStatus');
+        btnWatched.innerText = 'Remove from Watched';
+      }
+      refreshLibrary('watched');
+      return;
+    }
+    if (btnWatched.innerText.toLowerCase() === 'remove from watched') {
+      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+      if (movie.queue === true) {
+        localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
+        btnWatched.innerText = 'Add to Watched';
+      } else {
+        localStorageRemoveMovie(libraryLocalName, response.data.id);
+        btnWatched.innerText = 'Add to Watched';
+      }
+      refreshLibrary('watched');
+      return;
+    }
+  };
+
+  btnToWatch.onclick = function () {
+    if (btnToWatch.innerText.toLowerCase() === 'add to queue') {
+      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+      if (movie !== undefined) {
+        localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+        btnToWatch.innerText = 'Remove from Queue';
+      } else {
+        localStorageAddMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+        btnToWatch.innerText = 'Remove from Queue';
+      }
+      refreshLibrary('queue');
+      return;
+    }
+    if (btnToWatch.innerText.toLowerCase() === 'remove from queue') {
+      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+      if (movie.watched === true) {
+        localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+        btnToWatch.innerText = 'Add to Queue';
+      } else {
+        localStorageRemoveMovie(libraryLocalName, response.data.id);
+        btnToWatch.innerText = 'Add to Queue';
+      }
+      refreshLibrary('queue');
+      return;
+    }
+  };
+}
+
+function setBtnName(libraryName, movieid, btnType) {
+  const movie = localStorageGetMovieStatus(libraryName, movieid);
+  let btnName = '';
+  if (movie !== undefined) {
+    if (btnType === 'watchedStatus') {
+      btnName = movie.watched ? 'Remove from Watched' : 'Add To Watched';
+    } else if (btnType === 'toWatchStatus') {
+      btnName = movie.queue ? 'Remove from Queue' : 'Add To Queue';
+    }
+  } else {
+    switch (btnType) {
+      case 'watchedStatus':
+        btnName = 'Add To Watched';
+        break;
+      case 'toWatchStatus':
+        btnName = 'Add To Queue';
+        break;
+      default:
+        btnName = 'ooo';
+    }
+  }
+  return btnName;
 }
 
 function createModalButtonIcon() {
@@ -79,26 +185,15 @@ function createModalButtonIcon() {
   svg.appendChild(path);
 }
 
-// const movieCards = document.querySelectorAll('.movie-card');
-// for (const movieCard of movieCards) {
-//   movieCard.addEventListener('click', event => showMovieModal(event));
-// }
+function refreshLibrary(setStatus) {
+  if (currentFileName() === 'my-library.html') {
+    //resolve jak sprawdzić które są wyświetlane filmy watched czy towatch?? dodajemy zmienna eksportowaną?
+    localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer);
+  }
+}
 
-// function showMovieModal(event) {
-//   if (event.target.type == 'button') {
-//     return;
-//   }
-//   const backdrop = document.querySelector('.movie-backdrop');
-//   const movieWindowContent = document.querySelector('.movie-modal');
-//   backdrop.classList.remove('is-hidden');
-//   movieWindowContent.insertAdjacentHTML(
-//     'beforeend',
-//     `<div>
-
-// <p>informacje o filmie - BEZ DELEGACJI</p> </div>`,
-//   );
-//   backdrop.onclick = function () {
-//     backdrop.classList.add('is-hidden');
-//     movieWindowContent.innerHTML = '';
-//   };
-// }
+function currentFileName() {
+  let path = document.location.pathname;
+  let page = path.split('/').pop();
+  return page;
+}
