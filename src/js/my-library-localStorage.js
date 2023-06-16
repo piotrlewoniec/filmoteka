@@ -14,9 +14,13 @@ const btnQueue = document.querySelector('#queue');
 
 btnWatched.addEventListener('click', () => {
   localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer);
+  btnWatched.classList.add('mylib-active');
+  btnQueue.classList.remove('mylib-active');
 });
 btnQueue.addEventListener('click', () => {
   localStorageLoadMovies(libraryLocalName, 'queue', movieListContainer);
+  btnWatched.classList.remove('mylib-active');
+  btnQueue.classList.add('mylib-active');
 });
 
 if (libraryLocalName in localStorage) {

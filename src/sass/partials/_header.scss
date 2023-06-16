@@ -204,7 +204,15 @@
     box-shadow: 0px 8px 43px rgba(255, 107, 1, 0.6);
     border: none;
     background: var.$active-color;
+    color: var.$background-color-lighter;
   }
+}
+
+.mylib-active {
+  box-shadow: 0px 8px 43px rgba(255, 107, 1, 0.6);
+  border: none;
+  background: var.$active-color;
+  color: var.$background-color-lighter;
 }
 
 @include mq.tablet {
