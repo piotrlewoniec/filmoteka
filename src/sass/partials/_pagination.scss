@@ -1,6 +1,9 @@
 @use '../utils/mediaquery' as mq;
 @use '../utils/variables' as var;
 
+.pagination__placeholder {
+  padding-bottom: 60px;
+}
 .pagination {
   display: block;
   .pagination-btn,
