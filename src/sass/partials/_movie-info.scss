@@ -75,8 +75,18 @@
 }
 
 .movie-info__img {
-  margin-bottom: 20px;
   border-radius: 5px;
+  margin-bottom: 20px;
+  @include mq.tablet {
+    margin-bottom: 8px;
+    width: 264px;
+    height: 373.55px;
+  }
+  @include mq.desktop {
+    margin-bottom: 40px;
+    width: 375px;
+    height: 478px;
+  }
 }
 
 .movie-info__title {
