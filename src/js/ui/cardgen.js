@@ -11,7 +11,7 @@ import { apikeyTMDB } from '../config/apikey';
 export async function renderMovieList(movieListContainer, movieList) {
   const genres = await fetchGenres();
   const movieCards = movieList
-    .filter(movie => movie.genre_ids.length > 0)
+    .filter(movie => movie.genre_ids.length > 0 && movie.poster_path !== null)
     .map(async movie => {
       const key = await getMovieTrailerKey(movie);
       return `
@@ -101,10 +101,14 @@ async function getMovieTrailerKey(movie) {
 function activateTrailerButtons() {
   const trailerButtons = document.querySelectorAll('.movie-card__trailer-button');
   trailerButtons.forEach(trailerButton => {
-    trailerButton.onclick = function (event) {
-      event.preventDefault();
-      showTrailer(trailerButton.dataset.trailerKey);
-    };
+    if (trailerButton.dataset.trailerKey != '') {
+      trailerButton.onclick = function (event) {
+        event.preventDefault();
+        showTrailer(trailerButton.dataset.trailerKey);
+      };
+    } else {
+      trailerButton.classList.add('is-hidden');
+    }
   });
 }
 
