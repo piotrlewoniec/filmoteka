@@ -94,6 +94,18 @@
   }
   &__genre {
     color: var.$active-color;
+    display: flex;
+    align-items: center;
+  }
+  &__voting {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.33;
+    color: var.$background-color-lighter;
+    background: #ff6b01;
+    border-radius: 5px;
+    padding: 3px 10px;
+    margin-left: 5px;
   }
 }
 
