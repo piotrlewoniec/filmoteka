@@ -1,9 +1,6 @@
 @use '../utils/mediaquery' as mq;
 @use '../utils/variables' as var;
 
-.pagination__placeholder {
-  padding-bottom: 60px;
-}
 .pagination {
   display: block;
   .pagination-btn,
@@ -45,6 +42,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 40px;
+  }
+  @include mq.tablet {
+    &__placeholder {
+      padding-bottom: 60px;
+    }
   }
 }
 .pagination-container {
