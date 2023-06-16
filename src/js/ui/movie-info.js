@@ -39,9 +39,25 @@ async function showMovieModal(event) {
       <svg class="button-close__info" width="30px" height="30px" viewBox="0 0 32 32">
             </svg>
       </button>
-      <img class="movie-info__img" src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
-      alt="${response.data.title}" loading="lazy" width="240" height="357"
-      sizes="(min-width: 1280px) 395px, (min-width: 768px) 264px, 280px" />
+      <img class="movie-info__img" 
+         src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
+         alt="${response.data.title}" 
+         loading="lazy" 
+         width="240" 
+         height="357" 
+                 srcset="
+           https://image.tmdb.org/t/p/w342${response.data.poster_path} 240w,
+           https://image.tmdb.org/t/p/w780${response.data.poster_path} 560w,
+           https://image.tmdb.org/t/p/original${response.data.poster_path} 840w,
+           https://image.tmdb.org/t/p/w342${response.data.poster_path} 264w,
+           https://image.tmdb.org/t/p/w780${response.data.poster_path} 672w,
+           https://image.tmdb.org/t/p/original${response.data.poster_path} 1008w,
+           https://image.tmdb.org/t/p/w500${response.data.poster_path} 375w,
+           https://image.tmdb.org/t/p/original${response.data.poster_path} 790w,
+           https://image.tmdb.org/t/p/original${response.data.poster_path} 1185w
+         "
+         sizes="(min-width: 1280px) 375px, (min-width: 768px) 264px, 240px"
+      />
   <div class="movie-info__data">
       <h2 class="movie-info__title">${response.data.title}<h2>
               <div class="movie-info__details">
@@ -200,3 +216,24 @@ function currentFileName() {
   let page = path.split('/').pop();
   return page;
 }
+
+// <img class="movie-info__img"
+// src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
+// alt="${response.data.title}"
+// loading="lazy"
+// width="240"
+// height="357"
+// data-movieid="${movie.id}"
+// srcset="
+//   https://image.tmdb.org/t/p/w342${response.data.poster_path} 240w,
+//   https://image.tmdb.org/t/p/w780${response.data.poster_path} 560w,
+//   https://image.tmdb.org/t/p/original${response.data.poster_path} 840w,
+//   https://image.tmdb.org/t/p/w342${response.data.poster_path} 264w,
+//   https://image.tmdb.org/t/p/w780${response.data.poster_path} 672w,
+//   https://image.tmdb.org/t/p/original${response.data.poster_path} 1008w,
+//   https://image.tmdb.org/t/p/w500${response.data.poster_path} 375w,
+//   https://image.tmdb.org/t/p/original${response.data.poster_path} 790w,
+//   https://image.tmdb.org/t/p/original${response.data.poster_path} 1185w
+// "
+// sizes="(min-width: 1280px) 375px, (min-width: 768px) 264px, 240px"
+// />
