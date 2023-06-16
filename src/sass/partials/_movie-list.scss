@@ -42,7 +42,7 @@
 .movie-card {
   border-radius: 5px;
   position: relative;
-  transition: transform 1000ms ease;
+  transition: transform 800ms ease;
   &:focus,
   &:hover {
     transform: scale(1.05);
