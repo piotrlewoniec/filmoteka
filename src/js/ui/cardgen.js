@@ -10,9 +10,11 @@ import { apikeyTMDB } from '../config/apikey';
 
 export async function renderMovieList(movieListContainer, movieList) {
   const genres = await fetchGenres();
-  const movieCards = movieList.map(async movie => {
-    const key = await getMovieTrailerKey(movie);
-    return `
+  const movieCards = movieList
+    .filter(movie => movie.genre_ids.length > 0)
+    .map(async movie => {
+      const key = await getMovieTrailerKey(movie);
+      return `
      <div class="movie-card"> 
        <img class="movie-card__poster" 
          src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
@@ -37,10 +39,10 @@ export async function renderMovieList(movieListContainer, movieList) {
      <ul class="movie-card__info">
        <li class="movie-card__title" data-movieid="${movie.id}" >${truncateTitle(movie.title)}</li>
        <li class="movie-card__genre" data-movieid="${movie.id}" >${getGenresNamesAndYear(
-      genres,
-      movie.genre_ids,
-      movie.release_date,
-    )}</li>
+        genres,
+        movie.genre_ids,
+        movie.release_date,
+      )}</li>
      </ul>
      <button type="button" class="movie-card__trailer-button" 
      data-trailer-key="${key}">Trailer
@@ -49,7 +51,7 @@ export async function renderMovieList(movieListContainer, movieList) {
 </button>
     </div>
       `;
-  });
+    });
   const markup = await Promise.all(movieCards);
   movieListContainer.innerHTML = markup.join(' ');
   activateTrailerButtons();
