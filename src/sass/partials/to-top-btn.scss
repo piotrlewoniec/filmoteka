@@ -20,5 +20,10 @@
       cursor: pointer;
       background-color: var.$active-color;
     }
+    &__icon {
+        width: 40px;
+        height: 40px;
+        fill: var.$background-color-darker;
+      }
     
   }
