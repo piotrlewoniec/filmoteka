@@ -8,9 +8,6 @@ let parameters = {};
 let moviesContainer = {};
 let paginationContainer = {};
 
-//const header = { ...defaultHeaderGet, ...searchMovieUrl };
-//const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
-
 export function setPagination({
   headerRef,
   parametersRef,
@@ -30,7 +27,6 @@ export function setPagination({
     behavior: 'smooth',
   });
 }
-
 // Dodajemy notyfikację przed pobraniem filmów
 async function fetchMovies(page) {
   Notiflix.Loading.pulse('Pobieranie filmów...');
@@ -56,18 +52,30 @@ async function fetchMovies(page) {
   } catch (error) {
     // Wyświetlamy notyfikację o błędzie
     Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
-
-    // Ukrywamy notyfikację po błędzie
+    // Wyświetlamy notyfikację o błędzie
     Notiflix.Loading.remove();
   }
+}
+
+function createDots(direction) {
+  const button = document.createElement('button');
+  button.textContent = '...';
+  button.classList.add('pagination-btn', 'dots', `dots-${direction}`);
+  button.addEventListener('click', function () {
+    const currentPage = parseInt(
+      paginationContainer.querySelector('.active').getAttribute('data-page'),
+    );
+    const offset = direction === 'left' ? -3 : 3;
+    fetchMovies(currentPage + offset);
+  });
+  return button;
 }
 
 function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
   const isMobile = window.innerWidth <= 768; // Warunek dla urządzeń mobilnych
-
-  const visibleButtons = isMobile ? 4 : 7; // Liczba widocznych przycisków
+  const visibleButtons = isMobile ? 4 : 7;
   let startPage = Math.max(currentPage - Math.floor(visibleButtons / 2), 1);
   let endPage = Math.min(startPage + visibleButtons - 1, totalPages);
 
@@ -86,17 +94,21 @@ function renderPaginationButtons(currentPage, totalPages) {
   );
 
   if (startPage > 1) {
+    if (startPage === 2 && !isMobile) {
+      paginationContainer.appendChild(createDots('left'));
+    }
+
     paginationContainer.appendChild(createPaginationButton(1));
     if (startPage > 2 && !isMobile) {
-      paginationContainer.appendChild(createDots());
+      paginationContainer.appendChild(createDots('left'));
     }
   }
 
   for (let i = startPage; i <= endPage; i++) {
     if (isMobile) {
-      if (i === 100 || i > startPage + 3) continue; // Pominięcie przycisku 1000 oraz przycisków powyżej startPage + 3 na urządzeniach mobilnych
+      if (i === 100 || i > startPage + 3) continue;
     } else {
-      if (i === 1000) continue; // Pominięcie przycisku 1000 na nie-mobilnych urządzeniach
+      if (i === 1000) continue;
     }
     const button = createPaginationButton(i);
     if (i === currentPage) {
@@ -110,7 +122,7 @@ function renderPaginationButtons(currentPage, totalPages) {
 
   if (endPage < totalPages) {
     if (endPage < totalPages - 1 && !isMobile) {
-      paginationContainer.appendChild(createDots());
+      paginationContainer.appendChild(createDots('right'));
     }
 
     paginationContainer.appendChild(createPaginationButton(totalPages));
@@ -166,16 +178,8 @@ function createNavigationButton(text, page, enabled, visible, className) {
   return button;
 }
 
-function createDots() {
-  const dots = document.createElement('span');
-  dots.textContent = '...';
-  dots.classList.add('dots');
-  return dots;
-}
-
 function getArrowSvg(direction) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  // svg.setAttribute('class', 'xx');
   svg.setAttribute('width', '16px');
   svg.setAttribute('height', '16px');
   svg.setAttribute('viewBox', '0 0 32 32');
@@ -196,4 +200,18 @@ function getArrowSvg(direction) {
   svg.appendChild(path);
 
   return svg.outerHTML;
+}
+
+function createDots(direction) {
+  const button = document.createElement('button');
+  button.textContent = '...';
+  button.classList.add('pagination-btn', 'dots', `dots-${direction}`);
+  button.addEventListener('click', function () {
+    const currentPage = parseInt(
+      paginationContainer.querySelector('.active').getAttribute('data-page'),
+    );
+    const direction = this.classList.contains('dots-left') ? -1 : 1;
+    fetchMovies(currentPage + 4 * direction);
+  });
+  return button;
 }
