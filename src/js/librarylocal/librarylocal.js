@@ -101,3 +101,40 @@ export async function localStorageLoadMovies(libraryName, movieStatus, movieList
   const movies = await fetchMoviesDetails(moviesToDisplay);
   renderMovieList(movieListContainer, movies);
 }
+
+/*
+    const maxMoviesPerPage = 20;
+    let moviesPageCount =0;
+   maxMoviesPerPage* moviesPageToLoad-1 
+   startIndex =maxMoviesPerPage *(P-1) ; endIndex = maxMoviesPerPage * (P);
+0..19 1  startIndex =maxMoviesPerPage *(1-1) ; endIndex = maxMoviesPerPage * (1);
+20..39 2  startIndex =maxMoviesPerPage *(2-1) ; endIndex = maxMoviesPerPage * (2);
+40..59  3 startIndex =maxMoviesPerPage *(3-1) ; endIndex = maxMoviesPerPage * (3);
+60..79 4 startIndex =maxMoviesPerPage *(4-1) ; endIndex = maxMoviesPerPage * (4);
+80..99 5 startIndex =maxMoviesPerPage *(5-1) ; endIndex = maxMoviesPerPage * (5);
+100..108 6 (9 filmow) startIndex = ; endIndex = ;
+
+const maxMoviesPerPage = 20;
+let moviesPageCount =0;
+let startIndex =0 ;
+let endIndex = 0;
+
+if (moviesToDisplay.length<=maxMoviesPerPage){
+  const movies = await fetchMoviesDetails(moviesToDisplay);
+  renderMovieList(movieListContainer, movies);
+} else if (moviesToDisplay.length%maxMoviesPerPage!==0){
+moviesPageCount = Math.trunc(moviesToDisplay.length/maxMoviesPerPage) +1;
+}else if (moviesToDisplay.length%maxMoviesPerPage===0){
+moviesPageCount = moviesToDisplay.length/maxMoviesPerPage;
+}
+
+startIndex =maxMoviesPerPage *(P-1);
+if (moviesToDisplay.length%maxMoviesPerPage!==0 && (P) === moviesPageCount){
+endIndex = moviesToDisplay.length;
+} else {
+endIndex = maxMoviesPerPage * (P);
+}
+const moviesToDisplayFragment = moviesToDisplay.slice(startIndex, endIndex);
+
+
+    */
