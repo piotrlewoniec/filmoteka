@@ -179,6 +179,7 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
   &-modal {
+    border: none;
     max-height: 50vw;
     max-width: 90vw;
     transform: translateY(50%) scale(1);

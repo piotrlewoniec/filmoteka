@@ -80,7 +80,7 @@ async function showMovieModal(event) {
                         .join(', ')}</li>
                   </ul>
               </div>
-              <h3 class="movie-info__headline">ABOUT</h3>
+              <p class="movie-info__headline">ABOUT</p>
               <p class="movie-info__about">${response.data.overview}</p>
               <ul class="movie-info__buttons">
                   <li>
