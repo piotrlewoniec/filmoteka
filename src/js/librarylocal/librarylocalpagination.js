@@ -1,15 +1,35 @@
 import Notiflix from 'notiflix';
-import { renderMoviePlaceholders } from './noApi';
+import { renderMoviePlaceholders } from '../ui/noApi';
 import { axiosGetData } from '../apirest/axiosGetData';
-import { renderMovieList } from './cardgen';
+import { renderMovieList } from '../ui/cardgen';
+import { fetchMoviesDetails } from './librarylocal';
 
 let header = {};
 let parameters = {};
 let moviesContainer = {};
 let paginationContainer = {};
+let moviesArray;
+let moviesPageCount = 0;
 
-//const header = { ...defaultHeaderGet, ...searchMovieUrl };
-//const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
+export function setPaginationLocalStorage({
+  moviesArrayRef,
+  movieListContainer,
+  paginationContainerRef,
+  currentPageRef,
+  totalPagesRef,
+}) {
+  moviesArray = moviesArrayRef;
+  moviesContainer = movieListContainer;
+  paginationContainer = paginationContainerRef;
+  moviesPageCount = totalPagesRef;
+  paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
+  renderPaginationButtons(currentPageRef, totalPagesRef);
+  fetchMovies(currentPageRef);
+  window.scrollBy({
+    top: -document.body.offsetHeight,
+    behavior: 'smooth',
+  });
+}
 
 export function setPagination({
   headerRef,
@@ -23,48 +43,64 @@ export function setPagination({
   parameters = parametersRef;
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
+  paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
   renderPaginationButtons(currentPageRef, totalPagesRef);
   window.scrollBy({
     top: -document.body.offsetHeight,
     behavior: 'smooth',
   });
 }
-
 // Dodajemy notyfikację przed pobraniem filmów
 async function fetchMovies(page) {
   Notiflix.Loading.pulse('Pobieranie filmów...');
-  let currentPageLocal, totalPagesLocal;
+  const maxMoviesPerPage = 20;
+  let startIndex = 0;
+  let endIndex = 0;
+  startIndex = maxMoviesPerPage * (page - 1);
+  if (moviesArray.length % maxMoviesPerPage !== 0 && page === moviesPageCount) {
+    endIndex = moviesArray.length;
+  } else {
+    endIndex = maxMoviesPerPage * page;
+  }
+  const moviesArrayFragment = moviesArray.slice(startIndex, endIndex);
   try {
-    parameters.page = page;
-    const serverData = await axiosGetData(header, parameters);
-    const movies = serverData.data;
-    currentPageLocal = movies.page;
-    totalPagesLocal = movies.total_pages;
-
-    moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
-    renderMoviePlaceholders(moviesContainer);
-    renderMovieList(moviesContainer, movies.results);
-    renderPaginationButtons(currentPageLocal, totalPagesLocal);
+    const moviesArrayFragmentDetails = await fetchMoviesDetails(moviesArrayFragment);
+    console.log(startIndex, endIndex, moviesArrayFragmentDetails);
+    moviesContainer.innerHTML = '';
+    renderMovieList(moviesContainer, moviesArrayFragmentDetails);
+    renderPaginationButtons(page, moviesPageCount);
     window.scrollBy({
       top: -document.body.offsetHeight,
       behavior: 'smooth',
     });
-
-    // Ukrywamy notyfikację po pobraniu filmów
     Notiflix.Loading.remove();
   } catch (error) {
     // Wyświetlamy notyfikację o błędzie
     Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
-
-    // Ukrywamy notyfikację po błędzie
+    // Wyświetlamy notyfikację o błędzie
     Notiflix.Loading.remove();
   }
+}
+
+function createDots(direction) {
+  const button = document.createElement('button');
+  button.textContent = '...';
+  button.classList.add('pagination-btn', 'dots', `dots-${direction}`);
+  button.addEventListener('click', function () {
+    const currentPage = parseInt(
+      paginationContainer.querySelector('.active').getAttribute('data-page'),
+    );
+    const offset = direction === 'left' ? -3 : 3;
+    fetchMovies(currentPage + offset);
+  });
+  return button;
 }
 
 function renderPaginationButtons(currentPage, totalPages) {
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
-  const visibleButtons = 7;
+  const isMobile = window.innerWidth <= 768; // Warunek dla urządzeń mobilnych
+  const visibleButtons = isMobile ? 4 : 7;
   let startPage = Math.max(currentPage - Math.floor(visibleButtons / 2), 1);
   let endPage = Math.min(startPage + visibleButtons - 1, totalPages);
 
@@ -83,13 +119,22 @@ function renderPaginationButtons(currentPage, totalPages) {
   );
 
   if (startPage > 1) {
+    if (startPage === 2 && !isMobile) {
+      paginationContainer.appendChild(createDots('left'));
+    }
+
     paginationContainer.appendChild(createPaginationButton(1));
-    if (startPage > 2) {
-      paginationContainer.appendChild(createDots());
+    if (startPage > 2 && !isMobile) {
+      paginationContainer.appendChild(createDots('left'));
     }
   }
 
   for (let i = startPage; i <= endPage; i++) {
+    if (isMobile) {
+      if (i === 100 || i > startPage + 3) continue;
+    } else {
+      if (i === 1000) continue;
+    }
     const button = createPaginationButton(i);
     if (i === currentPage) {
       button.classList.add('active');
@@ -101,8 +146,8 @@ function renderPaginationButtons(currentPage, totalPages) {
   }
 
   if (endPage < totalPages) {
-    if (endPage < totalPages - 1) {
-      paginationContainer.appendChild(createDots());
+    if (endPage < totalPages - 1 && !isMobile) {
+      paginationContainer.appendChild(createDots('right'));
     }
 
     paginationContainer.appendChild(createPaginationButton(totalPages));
@@ -158,16 +203,8 @@ function createNavigationButton(text, page, enabled, visible, className) {
   return button;
 }
 
-function createDots() {
-  const dots = document.createElement('span');
-  dots.textContent = '...';
-  dots.classList.add('dots');
-  return dots;
-}
-
 function getArrowSvg(direction) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  // svg.setAttribute('class', 'xx');
   svg.setAttribute('width', '16px');
   svg.setAttribute('height', '16px');
   svg.setAttribute('viewBox', '0 0 32 32');
@@ -188,4 +225,18 @@ function getArrowSvg(direction) {
   svg.appendChild(path);
 
   return svg.outerHTML;
+}
+
+function createDots(direction) {
+  const button = document.createElement('button');
+  button.textContent = '...';
+  button.classList.add('pagination-btn', 'dots', `dots-${direction}`);
+  button.addEventListener('click', function () {
+    const currentPage = parseInt(
+      paginationContainer.querySelector('.active').getAttribute('data-page'),
+    );
+    const direction = this.classList.contains('dots-left') ? -1 : 1;
+    fetchMovies(currentPage + 4 * direction);
+  });
+  return button;
 }
