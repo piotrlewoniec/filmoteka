@@ -41,5 +41,6 @@ function displayResult(data) {
     paginationContainerRef: data.paginationContainer,
     currentPageRef: data.movies.data.page,
     totalPagesRef: data.movies.data.total_pages,
+    isLocalStorageRef: false,
   });
 }

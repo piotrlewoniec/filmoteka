@@ -8,7 +8,7 @@ import {
 import { apikeyTMDB } from '../config/apikey';
 import { renderMovieList } from '../ui/cardgen';
 import { renderMoviePlaceholder } from '../ui/noApi';
-import { setPaginationLocalStorage } from './librarylocalpagination';
+import { setPaginationLocalStorage } from '../ui/pagination';
 
 function localStorageCreate(libraryName) {
   localStorageSave(libraryName, []);
@@ -100,7 +100,7 @@ export async function localStorageLoadMovies(
   paginationContainer,
 ) {
   const moviesToDisplay = localStorageLoadSelectedMovies(libraryName, movieStatus);
-  const maxMoviesPerPage = 20;
+  const maxMoviesPerPage = 3;
   let moviesPageCount = 0;
   movieListContainer.innerHTML = '';
   paginationContainer.innerHTML = '';
@@ -123,5 +123,6 @@ export async function localStorageLoadMovies(
     paginationContainerRef: paginationContainer,
     currentPageRef: 1,
     totalPagesRef: moviesPageCount,
+    isLocalStorageRef: true,
   });
 }
