@@ -10,6 +10,7 @@ const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
 const searchForm = document.querySelector('.header__form-item');
 const searchInput = document.querySelector('.header__form-input');
+const formContainer = document.querySelector('.header__form');
 
 Notiflix.Notify.init();
 
@@ -34,8 +35,11 @@ searchForm.addEventListener('submit', async event => {
     // movies.total_pages
     // movies.total_results
     if (movies.results.length === 0) {
-      Notiflix.Notify.failure(
-        'Search result not successful. Enter the correct movie name and try again',
+      formContainer.insertAdjacentHTML(
+        'beforeend',
+        `<p class="header__form-alert">
+          Search result not successful. Enter the correct movie name and try again
+        </p>`,
       );
     }
     clearMovieList();
