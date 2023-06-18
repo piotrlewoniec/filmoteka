@@ -8,6 +8,7 @@ import {
 import { apikeyTMDB } from '../config/apikey';
 import { renderMovieList } from '../ui/cardgen';
 import { renderMoviePlaceholder } from '../ui/noApi';
+import { setPaginationLocalStorage } from '../ui/pagination';
 
 function localStorageCreate(libraryName) {
   localStorageSave(libraryName, []);
@@ -92,12 +93,36 @@ export async function fetchMoviesDetails(moviesSelected) {
   return moviesDetails;
 }
 
-export async function localStorageLoadMovies(libraryName, movieStatus, movieListContainer) {
+export async function localStorageLoadMovies(
+  libraryName,
+  movieStatus,
+  movieListContainer,
+  paginationContainer,
+) {
   const moviesToDisplay = localStorageLoadSelectedMovies(libraryName, movieStatus);
+  const maxMoviesPerPage = 20;
+  let moviesPageCount = 0;
+  movieListContainer.innerHTML = '';
+  paginationContainer.innerHTML = '';
   if (moviesToDisplay.length === 0) {
     renderMoviePlaceholder(movieListContainer);
     return;
   }
-  const movies = await fetchMoviesDetails(moviesToDisplay);
-  renderMovieList(movieListContainer, movies);
+  if (moviesToDisplay.length <= maxMoviesPerPage) {
+    const movies = await fetchMoviesDetails(moviesToDisplay);
+    renderMovieList(movieListContainer, movies);
+    return;
+  } else if (moviesToDisplay.length % maxMoviesPerPage !== 0) {
+    moviesPageCount = Math.trunc(moviesToDisplay.length / maxMoviesPerPage) + 1;
+  } else if (moviesToDisplay.length % maxMoviesPerPage === 0) {
+    moviesPageCount = moviesToDisplay.length / maxMoviesPerPage;
+  }
+  setPaginationLocalStorage({
+    moviesArrayRef: moviesToDisplay,
+    movieListContainer: movieListContainer,
+    paginationContainerRef: paginationContainer,
+    currentPageRef: 1,
+    totalPagesRef: moviesPageCount,
+    isLocalStorageRef: true,
+  });
 }

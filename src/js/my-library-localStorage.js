@@ -13,47 +13,18 @@ const btnWatched = document.querySelector('#watched');
 const btnQueue = document.querySelector('#queue');
 
 btnWatched.addEventListener('click', () => {
-  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer);
+  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer, paginationContainer);
   btnWatched.classList.add('mylib-active');
   btnQueue.classList.remove('mylib-active');
 });
 btnQueue.addEventListener('click', () => {
-  localStorageLoadMovies(libraryLocalName, 'queue', movieListContainer);
+  localStorageLoadMovies(libraryLocalName, 'queue', movieListContainer, paginationContainer);
   btnWatched.classList.remove('mylib-active');
   btnQueue.classList.add('mylib-active');
 });
 
 if (libraryLocalName in localStorage) {
-  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer);
+  localStorageLoadMovies(libraryLocalName, 'watched', movieListContainer, paginationContainer);
 } else {
   renderMoviePlaceholder(movieListContainer);
 }
-
-/*
-    setPagination({
-      headerRef: data.header,
-      parametersRef: data.parameters,
-      movieListContainer: movieListContainer,
-      paginationContainerRef: paginationContainer,
-      currentPageRef: data.movies.data.page,
-      totalPagesRef: data.movies.data.total_pages,
-    });
-    */
-
-/*
-    const maxMoviesPerPage = 20;
-    mvmylibToDisplay
-0..19  20 
-20..39 20 
-40...59 20
-tab.length/20 
-Math.trunc(
-if (mvmylibToDisplay.length <=20 ){
-renderMovieList(movieListContainer, movies);
-} else {
-
-}
-
-
-
-    */

@@ -48,6 +48,7 @@ searchForm.addEventListener('submit', async event => {
       paginationContainerRef: paginationContainer,
       currentPageRef: movies.page,
       totalPagesRef: movies.total_pages,
+      isLocalStorageRef: false,
     });
   } catch (error) {
     Notiflix.Notify.failure(
