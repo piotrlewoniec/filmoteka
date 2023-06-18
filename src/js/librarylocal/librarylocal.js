@@ -100,7 +100,7 @@ export async function localStorageLoadMovies(
   paginationContainer,
 ) {
   const moviesToDisplay = localStorageLoadSelectedMovies(libraryName, movieStatus);
-  const maxMoviesPerPage = 3;
+  const maxMoviesPerPage = 20;
   let moviesPageCount = 0;
   movieListContainer.innerHTML = '';
   paginationContainer.innerHTML = '';

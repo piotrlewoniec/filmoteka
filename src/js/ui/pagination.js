@@ -60,7 +60,7 @@ export function setPaginationLocalStorage({
 async function fetchMovies(page) {
   Notiflix.Loading.pulse('Pobieranie filmów...');
   if (isLocalStorage) {
-    const maxMoviesPerPage = 3;
+    const maxMoviesPerPage = 20;
     let startIndex = 0;
     let endIndex = 0;
     startIndex = maxMoviesPerPage * (page - 1);
