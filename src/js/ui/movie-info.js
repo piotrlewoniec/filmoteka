@@ -15,7 +15,7 @@ import {
 import { apikeyTMDB } from '../config/apikey';
 
 const movieListContainer = document.querySelector('.movie-list-container');
-
+const paginationContainer = document.querySelector('.pagination');
 const libraryLocalName = 'mvmylib';
 
 movieListContainer.addEventListener('click', showMovieModal);
@@ -207,7 +207,7 @@ function createModalButtonIcon() {
 function refreshLibrary(setStatus) {
   if (currentFileName() === 'my-library.html') {
     //resolve jak sprawdzić które są wyświetlane filmy watched czy towatch?? dodajemy zmienna eksportowaną?
-    localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer);
+    localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer, paginationContainer);
   }
 }
 
