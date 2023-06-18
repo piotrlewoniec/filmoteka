@@ -52,6 +52,19 @@
   }
 }
 
+.header__form-alert {
+  position: absolute;
+  top: 28px;
+  width: 280px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.14;
+  color: var.$accent-color;
+  @include mq.tablet {
+    width: 500px;
+  }
+}
+
 .header__logo {
   display: flex;
   align-items: center;
@@ -126,6 +139,10 @@
 }
 
 .header__form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &-item {
     display: flex;
     justify-content: center;
