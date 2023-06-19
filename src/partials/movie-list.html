@@ -1,6 +1,18 @@
 <!--section-movie-list-->
 <section class="movie-list-section">
   <h2 class="movie-list-header is-hidden">Movie-list</h2>
+  <div class="movie-list-dark-mode">
+    <button class="movie-list-change-theme icon-day is-hidden" data-theme="onLight">
+      <svg class="movie-list-day-icon" width="27px" height="27px">
+        <use href="./images/movie-list/icons.svg#icon-sun"></use>
+      </svg>
+    </button>
+    <button class="movie-list-change-theme icon-night" data-theme="onDark">
+      <svg class="movie-list-night-icon" width="27px" height="27px">
+        <use href="./images/movie-list/icons.svg#icon-no-sun"></use>
+      </svg>
+    </button>
+  </div>
   <div class="movie-list-container"></div>
 </section>
 
