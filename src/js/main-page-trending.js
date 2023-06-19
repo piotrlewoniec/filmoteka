@@ -44,3 +44,37 @@ function displayResult(data) {
     isLocalStorageRef: false,
   });
 }
+
+const changeThemeButtons = document.querySelectorAll('.movie-list-change-theme');
+changeThemeButtons.forEach(button => addChangeThemeEventListener(button));
+
+function addChangeThemeEventListener(changeThemeButton) {
+  changeThemeButton.addEventListener('click', event => {
+    const section = document.querySelector('.movie-list-section');
+    const container = document.querySelector('.movie-list-container');
+    const buttonIconDay = document.querySelector('.icon-day');
+    const buttonIconNight = document.querySelector('.icon-night');
+    const body = document.querySelector('body');
+    const paginationButtons = document.querySelectorAll('.pagination-btn');
+    if (event.currentTarget.dataset.theme == 'onDark') {
+      section.classList.add('dark-mode');
+      container.classList.add('dark-mode');
+      body.style.backgroundColor = '#000';
+      event.currentTarget.classList.add('is-hidden');
+      buttonIconDay.classList.remove('is-hidden');
+      paginationButtons.forEach(button => {
+        button.classList.add('dark-mode');
+      });
+    } else {
+      section.classList.remove('dark-mode');
+      container.classList.remove('dark-mode');
+      event.currentTarget.classList.remove('is-hidden');
+      buttonIconDay.classList.add('is-hidden');
+      buttonIconNight.classList.remove('is-hidden');
+      body.style.backgroundColor = '#fff';
+      paginationButtons.forEach(button => {
+        button.classList.remove('dark-mode');
+      });
+    }
+  });
+}

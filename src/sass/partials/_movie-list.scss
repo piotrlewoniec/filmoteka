@@ -9,7 +9,7 @@
     padding-bottom: 40px;
     padding-top: 20px;
     @include mq.tablet {
-      padding: 59px 32px 60px;
+      padding: 60px 32px;
     }
     @include mq.desktop {
       padding: 60px 32px;
@@ -40,6 +40,7 @@
 }
 
 .movie-card {
+  background-color: var.$background-color-lighter;
   border-radius: 5px;
   position: relative;
   transition: transform 800ms ease;
@@ -56,7 +57,8 @@
     }
   }
   &__poster {
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-bottom: 10px;
     @include mq.tablet {
       margin-bottom: 8px;
@@ -197,7 +199,34 @@
 .is-hidden,
 .is-hidden .trailer-modal {
   opacity: 0;
+  display: none;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(0%) scale(0);
+}
+
+.movie-list-change-theme {
+  cursor: pointer;
+  text-align: center;
+  background: 0 0;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  box-shadow: 1px 4px 6px #00000029;
+  padding: 2px 6px;
+}
+
+.icon-day {
+  fill: #fff;
+  background-color: #0000008b;
+}
+
+.icon-night {
+  fill: #1d1c1caa;
+  background-color: #fff;
+}
+
+.dark-mode {
+  color: var.$background-color-lighter !important;
+  background-color: var.$night-setting;
 }
