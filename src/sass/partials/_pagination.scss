@@ -44,6 +44,9 @@
     justify-content: center;
     padding-bottom: 40px;
   }
+  &__placeholder--title {
+    display: none;
+  }
   @include mq.tablet {
     &__placeholder {
       padding-bottom: 60px;
