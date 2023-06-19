@@ -152,12 +152,13 @@ function renderPaginationButtons(currentPage, totalPages) {
   );
 
   if (startPage > 1) {
-    if (startPage === 2 && !isMobile) {
+    paginationContainer.appendChild(createPaginationButton(1));
+
+    if (startPage > 2 && !isMobile) {
       paginationContainer.appendChild(createDots('left'));
     }
 
-    paginationContainer.appendChild(createPaginationButton(1));
-    if (startPage > 2 && !isMobile) {
+    if (startPage === 2 && !isMobile) {
       paginationContainer.appendChild(createDots('left'));
     }
   }
