@@ -6,24 +6,23 @@ function showHideLoader(element) {
   }
 }
 
-function loadContent() {
+export function loadContent() {
   const loaderElement = document.getElementById('loader');
-  showHideLoader(loaderElement); 
+  showHideLoader(loaderElement);
 
-  
-  fetchData()
-    .then(data => {
-      
-      showHideLoader(loaderElement);
+  // fetchData()
+  //   .then(data => {
 
-      renderData(data);
-    })
-    .catch(error => {
-      
-      showHideLoader(loaderElement);
+  //     showHideLoader(loaderElement);
 
-      showError(error);
-    });
+  //     renderData(data);
+  //   })
+  //   .catch(error => {
+
+  //     showHideLoader(loaderElement);
+
+  //     showError(error);
+  //   });
 }
 
 function fetchData() {
