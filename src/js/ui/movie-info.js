@@ -5,8 +5,8 @@ import {
   localStorageUpdateMovie,
   localStorageLoadMovies,
 } from '../librarylocal/librarylocal';
-
-import { axiosGetData } from '../apirest/axiosGetData';
+import { localStorageSave, localStorageLoad } from '../system/localstorage';
+import { axiosGetData } from '../apirest/axios-data';
 import {
   defaultHeaderGet,
   searchMovieDetailsUrl,
@@ -17,6 +17,7 @@ import { apikeyTMDB } from '../config/apikey';
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
 const libraryLocalName = 'mvmylib';
+const configVariable = 'filmotekaconfig';
 
 movieListContainer.addEventListener('click', showMovieModal);
 
@@ -98,6 +99,7 @@ async function showMovieModal(event) {
   closeModalBtn.onclick = function () {
     backdrop.classList.add('is-hidden');
     document.onkeydown = '';
+    document.onclick = '';
     movieWindowContent.innerHTML = '';
   };
 
@@ -110,6 +112,12 @@ async function showMovieModal(event) {
       isEscape = evt.keyCode === 27;
     }
     if (isEscape) {
+      closeModalBtn.onclick();
+    }
+  };
+
+  document.onclick = function (evt) {
+    if (evt.target.classList[0] === 'movie-backdrop') {
       closeModalBtn.onclick();
     }
   };
@@ -127,7 +135,16 @@ async function showMovieModal(event) {
         localStorageAddMovie(libraryLocalName, response.data.id, 'watchedStatus');
         btnWatched.innerText = 'Remove from Watched';
       }
-      refreshLibrary('watched');
+      if (configVariable in localStorage) {
+        const configVariableLocal = localStorageLoad(configVariable);
+        if (configVariableLocal.mylibrary === true) {
+          if (configVariableLocal.queue === true) {
+            refreshLibrary('queue');
+          } else {
+            refreshLibrary('watched');
+          }
+        }
+      }
       return;
     }
     if (btnWatched.innerText.toLowerCase() === 'remove from watched') {
@@ -139,7 +156,16 @@ async function showMovieModal(event) {
         localStorageRemoveMovie(libraryLocalName, response.data.id);
         btnWatched.innerText = 'Add to Watched';
       }
-      refreshLibrary('watched');
+      if (configVariable in localStorage) {
+        const configVariableLocal = localStorageLoad(configVariable);
+        if (configVariableLocal.mylibrary === true) {
+          if (configVariableLocal.queue === true) {
+            refreshLibrary('queue');
+          } else {
+            refreshLibrary('watched');
+          }
+        }
+      }
       return;
     }
   };
@@ -154,7 +180,16 @@ async function showMovieModal(event) {
         localStorageAddMovie(libraryLocalName, response.data.id, 'toWatchStatus');
         btnToWatch.innerText = 'Remove from Queue';
       }
-      refreshLibrary('queue');
+      if (configVariable in localStorage) {
+        const configVariableLocal = localStorageLoad(configVariable);
+        if (configVariableLocal.mylibrary === true) {
+          if (configVariableLocal.queue === true) {
+            refreshLibrary('queue');
+          } else {
+            refreshLibrary('watched');
+          }
+        }
+      }
       return;
     }
     if (btnToWatch.innerText.toLowerCase() === 'remove from queue') {
@@ -166,7 +201,16 @@ async function showMovieModal(event) {
         localStorageRemoveMovie(libraryLocalName, response.data.id);
         btnToWatch.innerText = 'Add to Queue';
       }
-      refreshLibrary('queue');
+      if (configVariable in localStorage) {
+        const configVariableLocal = localStorageLoad(configVariable);
+        if (configVariableLocal.mylibrary === true) {
+          if (configVariableLocal.queue === true) {
+            refreshLibrary('queue');
+          } else {
+            refreshLibrary('watched');
+          }
+        }
+      }
       return;
     }
   };
@@ -205,10 +249,11 @@ function createModalButtonIcon() {
 }
 
 function refreshLibrary(setStatus) {
-  if (currentFileName() === 'my-library.html') {
-    //resolve jak sprawdzić które są wyświetlane filmy watched czy towatch?? dodajemy zmienna eksportowaną?
-    localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer, paginationContainer);
-  }
+  // if (currentFileName() === 'my-library.html') {
+  //   //resolve jak sprawdzić które są wyświetlane filmy watched czy towatch?? dodajemy zmienna eksportowaną?
+  //   localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer, paginationContainer);
+  // }
+  localStorageLoadMovies(libraryLocalName, setStatus, movieListContainer, paginationContainer);
 }
 
 function currentFileName() {

@@ -1,4 +1,4 @@
-import { axiosGetData } from '../apirest/axiosGetData';
+import { axiosGetData } from '../apirest/axios-data';
 import {
   defaultHeaderGet,
   genresUrl,

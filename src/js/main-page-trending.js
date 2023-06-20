@@ -1,5 +1,5 @@
-import { renderMoviePlaceholders } from './ui/noApi';
-import { axiosGetData } from './apirest/axiosGetData';
+import { renderMoviePlaceholders } from './ui/noapi';
+import { axiosGetData } from './apirest/axios-data';
 import {
   defaultHeaderGet,
   trendingMovieTOP20Url,
@@ -8,9 +8,17 @@ import {
 import { apikeyTMDB } from './config/apikey';
 import { renderMovieList } from './ui/cardgen';
 import { setPagination } from './ui/pagination';
+import { localStorageSave, localStorageLoad } from './system/localstorage';
 
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
+const configVariable = 'filmotekaconfig';
+
+if (configVariable in localStorage) {
+  const configVariableLocal = localStorageLoad(configVariable);
+  configVariableLocal.mylibrary = false;
+  localStorageSave(configVariable, configVariableLocal);
+}
 
 renderMoviePlaceholders(movieListContainer);
 
@@ -42,39 +50,5 @@ function displayResult(data) {
     currentPageRef: data.movies.data.page,
     totalPagesRef: data.movies.data.total_pages,
     isLocalStorageRef: false,
-  });
-}
-
-const changeThemeButtons = document.querySelectorAll('.movie-list-change-theme');
-changeThemeButtons.forEach(button => addChangeThemeEventListener(button));
-
-function addChangeThemeEventListener(changeThemeButton) {
-  changeThemeButton.addEventListener('click', event => {
-    const section = document.querySelector('.movie-list-section');
-    const container = document.querySelector('.movie-list-container');
-    const buttonIconDay = document.querySelector('.icon-day');
-    const buttonIconNight = document.querySelector('.icon-night');
-    const body = document.querySelector('body');
-    const paginationButtons = document.querySelectorAll('.pagination-btn');
-    if (event.currentTarget.dataset.theme == 'onDark') {
-      section.classList.add('dark-mode');
-      container.classList.add('dark-mode');
-      body.style.backgroundColor = '#000';
-      event.currentTarget.classList.add('is-hidden');
-      buttonIconDay.classList.remove('is-hidden');
-      paginationButtons.forEach(button => {
-        button.classList.add('dark-mode');
-      });
-    } else {
-      section.classList.remove('dark-mode');
-      container.classList.remove('dark-mode');
-      event.currentTarget.classList.remove('is-hidden');
-      buttonIconDay.classList.add('is-hidden');
-      buttonIconNight.classList.remove('is-hidden');
-      body.style.backgroundColor = '#fff';
-      paginationButtons.forEach(button => {
-        button.classList.remove('dark-mode');
-      });
-    }
   });
 }
