@@ -1,6 +1,6 @@
 import Notiflix from 'notiflix';
-import { renderMoviePlaceholders } from './noApi';
-import { axiosGetData } from '../apirest/axiosGetData';
+import { renderMoviePlaceholders } from './noapi';
+import { axiosGetData } from '../apirest/axios-data';
 import { renderMovieList } from './cardgen';
 import { fetchMoviesDetails } from '../librarylocal/librarylocal';
 
@@ -9,6 +9,9 @@ let parameters = {};
 let moviesContainer = {};
 let paginationContainer = {};
 let moviesArray;
+
+let currentPage = 1;
+
 let moviesPageCount = 0;
 let isLocalStorage = false;
 
@@ -26,11 +29,20 @@ export function setPagination({
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
   isLocalStorage = isLocalStorageRef;
+
+  currentPage = currentPageRef;
+  moviesPageCount = totalPagesRef;
+
   paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
   renderPaginationButtons(currentPageRef, totalPagesRef);
   window.scrollBy({
     top: -document.body.offsetHeight,
     behavior: 'smooth',
+  });
+  // Reload paggination on screen size change
+  window.matchMedia('(min-width: 768px)').addEventListener('change', e => {
+    // if (!e.matches) return;
+    renderPaginationButtons(currentPage, moviesPageCount);
   });
 }
 
@@ -45,6 +57,7 @@ export function setPaginationLocalStorage({
   moviesArray = moviesArrayRef;
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
+  currentPage = currentPageRef;
   moviesPageCount = totalPagesRef;
   isLocalStorage = isLocalStorageRef;
   paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
@@ -53,6 +66,10 @@ export function setPaginationLocalStorage({
   window.scrollBy({
     top: -document.body.offsetHeight,
     behavior: 'smooth',
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', e => {
+    // if (!e.matches) return;
+    renderPaginationButtons(currentPage, moviesPageCount);
   });
 }
 
@@ -79,6 +96,7 @@ async function fetchMovies(page) {
         top: -document.body.offsetHeight,
         behavior: 'smooth',
       });
+      currentPage = page;
       Notiflix.Loading.remove();
     } catch (error) {
       // Wyświetlamy notyfikację o błędzie
@@ -98,6 +116,8 @@ async function fetchMovies(page) {
       moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
       renderMoviePlaceholders(moviesContainer);
       renderMovieList(moviesContainer, movies.results);
+      currentPage = currentPageLocal;
+      moviesPageCount = totalPagesLocal;
       renderPaginationButtons(currentPageLocal, totalPagesLocal);
       window.scrollBy({
         top: -document.body.offsetHeight,

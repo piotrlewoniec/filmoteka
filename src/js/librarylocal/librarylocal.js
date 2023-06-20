@@ -1,5 +1,5 @@
 import { localStorageSave, localStorageLoad } from '../system/localstorage';
-import { axiosGetData } from '../apirest/axiosGetData';
+import { axiosGetData } from '../apirest/axios-data';
 import {
   defaultHeaderGet,
   searchMovieDetailsUrl,
@@ -7,7 +7,7 @@ import {
 } from '../config/stdquery';
 import { apikeyTMDB } from '../config/apikey';
 import { renderMovieList } from '../ui/cardgen';
-import { renderMoviePlaceholder } from '../ui/noApi';
+import { renderMoviePlaceholder } from '../ui/noapi';
 import { setPaginationLocalStorage } from '../ui/pagination';
 
 function localStorageCreate(libraryName) {
