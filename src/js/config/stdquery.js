@@ -32,5 +32,14 @@ export const searchMovieUrl = {
 };
 export const searchMovieParams = {
   language: 'en-US',
-  include_adult: true,
+  include_adult: false,
+};
+
+export const searchMovieDetailsUrl = {
+  baseURL: 'https://api.themoviedb.org/3/movie/',
+  url: '',
+};
+
+export const searchMovieDetailsParams = {
+  language: 'en-US',
 };

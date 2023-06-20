@@ -1,5 +1,4 @@
 import './ui/daynight';
-import './main-page-searchbytitle';
-import './main-page-trending';
+import './my-library-localstorage';
 import './ui/movie-info';
 import './ui/to-top-btn';

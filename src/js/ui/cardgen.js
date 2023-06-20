@@ -1,4 +1,4 @@
-import { axiosGetData } from '../apirest/axiosGetData';
+import { axiosGetData } from '../apirest/axios-data';
 import {
   defaultHeaderGet,
   genresUrl,
@@ -10,9 +10,11 @@ import { apikeyTMDB } from '../config/apikey';
 
 export async function renderMovieList(movieListContainer, movieList) {
   const genres = await fetchGenres();
-  const movieCards = movieList.map(async movie => {
-    const key = await getMovieTrailerKey(movie);
-    return `
+  const movieCards = movieList
+    .filter(movie => movie.genre_ids.length > 0 && movie.poster_path !== null)
+    .map(async movie => {
+      const key = await getMovieTrailerKey(movie);
+      return `
      <div class="movie-card"> 
        <img class="movie-card__poster" 
          src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
@@ -20,6 +22,7 @@ export async function renderMovieList(movieListContainer, movieList) {
          loading="lazy" 
          width="280" 
          height="398" 
+         data-movieid="${movie.id}"
          srcset="
            https://image.tmdb.org/t/p/w342${movie.poster_path} 280w,
            https://image.tmdb.org/t/p/w780${movie.poster_path} 560w,
@@ -34,12 +37,14 @@ export async function renderMovieList(movieListContainer, movieList) {
          sizes="(min-width: 1280px) 395px, (min-width: 768px) 336px, 280px"
       />
      <ul class="movie-card__info">
-       <li class="movie-card__title">${truncateTitle(movie.title)}</li>
-       <li class="movie-card__genre">${getGenresNamesAndYear(
-         genres,
-         movie.genre_ids,
-         movie.release_date,
-       )}</li>
+       <li class="movie-card__title" data-movieid="${movie.id}" >${truncateTitle(movie.title)}</li>
+       <li class="movie-card__genre" data-movieid="${movie.id}" ><p>${getGenresNamesAndYear(
+        genres,
+        movie.genre_ids,
+        movie.release_date,
+      )} </p> <span class="movie-card__voting">${parseFloat(
+        movie.vote_average.toFixed(1),
+      )}</span> </li>
      </ul>
      <button type="button" class="movie-card__trailer-button" 
      data-trailer-key="${key}">Trailer
@@ -48,7 +53,7 @@ export async function renderMovieList(movieListContainer, movieList) {
 </button>
     </div>
       `;
-  });
+    });
   const markup = await Promise.all(movieCards);
   movieListContainer.innerHTML = markup.join(' ');
   activateTrailerButtons();
@@ -59,7 +64,14 @@ async function fetchGenres() {
   const header = { ...defaultHeaderGet, ...genresUrl };
   const parameters = { ...genresUrlParams, api_key: apikeyTMDB };
   const genres = await axiosGetData(header, parameters);
-  return new Map(genres.data.genres.map(genre => [genre.id, genre.name]));
+  return new Map(genres.data.genres.map(genre => [genre.id, getGenreName(genre)]));
+}
+
+function getGenreName(genre) {
+  if (genre.name === 'Science Fiction') {
+    return 'Sci-Fi';
+  }
+  return genre.name;
 }
 
 function truncateTitle(title) {
@@ -98,10 +110,14 @@ async function getMovieTrailerKey(movie) {
 function activateTrailerButtons() {
   const trailerButtons = document.querySelectorAll('.movie-card__trailer-button');
   trailerButtons.forEach(trailerButton => {
-    trailerButton.onclick = function (event) {
-      event.preventDefault();
-      showTrailer(trailerButton.dataset.trailerKey);
-    };
+    if (trailerButton.dataset.trailerKey != '') {
+      trailerButton.onclick = function (event) {
+        event.preventDefault();
+        showTrailer(trailerButton.dataset.trailerKey);
+      };
+    } else {
+      trailerButton.classList.add('is-hidden');
+    }
   });
 }
 

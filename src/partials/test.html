@@ -1,0 +1,27 @@
+<img class="movie-info__img" src="https://image.tmdb.org/t/p/w500${response.data.poster_path}"
+    alt="${response.data.title}" loading="lazy" width="240" height="357"
+    sizes="(min-width: 1280px) 395px, (min-width: 768px) 336px, 280px" />
+<div class="movie-info__data">
+    <h2 class="movie-info__title">${response.data.title}<h2>
+
+            <ul class="movie-info__params">
+                <li class="movie-info__params-vote">Vote / Votes ${response.data.vote_average} / ${
+                    response.data.vote_count
+                    }</li>
+                <li class="movie-info__params-popularity">Popularity ${response.data.popularity}</li>
+                <li class="movie-info__params-original">Original Title ${response.data.original_title}</li>
+                <li class="movie-info__params-genre">Genre ${response.data.genres
+                    .map(genre => genre.name)
+                    .join(', ')}</li>
+            </ul>
+            <h3>ABOUT</h3>
+            <p class="movie-info__about">${response.data.overview}</p>
+            <ul class="movie-info__buttons">
+                <li>
+                    <button class="watched-button" type="button">Add to Watched</button>
+                </li>
+                <li>
+                    <button class="queue-button" type="button">Add to Queue</button>
+                </li>
+            </ul>
+</div>

@@ -10,6 +10,14 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap"
       rel="stylesheet"
     />
+    <link rel="shourtcut icon" type="image/png" href="images/decorations/movie-camera.png" />
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+      integrity="sha512-wpPYUAdjBVSE4KJnH1VR1HeZfpl1ub8YT/NKx4PuQ5NmX2tKuGu6U/JRp5y+Y8XG2tV+wKQpNHVUX03MfMFn9Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    /> -->
     <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.0.0/modern-normalize.min.css"
@@ -18,11 +26,19 @@
     /> -->
     <title>Filmoteka | My library</title>
   </head>
-
   <body>
+    <!-- Html partials header main footer -->
     <include src="./partials/my-library-header.html"></include>
-    <include src="./partials/my-library-main.html"></include>
+    <main>
+      <!-- Html partials main section -->
+      <include src="./partials/movie-list.html"></include>
+      <include src="./partials/movie-info.html"></include>
+      <include src="./partials/pagination.html"></include>
+    </main>
     <include src="./partials/footer.html"></include>
+    <include src="./partials/to-top-btn.html"></include>
+    <!-- Scripts -->
     <script src="./index.js" type="module"></script>
+    <script src="./js/my-library.js" type="module"></script>
   </body>
 </html>

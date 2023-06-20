@@ -9,7 +9,7 @@
     padding-bottom: 40px;
     padding-top: 20px;
     @include mq.tablet {
-      padding: 59px 32px 60px;
+      padding: 60px 32px;
     }
     @include mq.desktop {
       padding: 60px 32px;
@@ -40,9 +40,10 @@
 }
 
 .movie-card {
+  background-color: var.$background-color-lighter;
   border-radius: 5px;
   position: relative;
-  transition: transform 1000ms ease;
+  transition: transform 800ms ease;
   &:focus,
   &:hover {
     transform: scale(1.05);
@@ -56,7 +57,8 @@
     }
   }
   &__poster {
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     margin-bottom: 10px;
     @include mq.tablet {
       margin-bottom: 8px;
@@ -94,6 +96,18 @@
   }
   &__genre {
     color: var.$active-color;
+    display: flex;
+    align-items: center;
+  }
+  &__voting {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.33;
+    color: var.$background-color-lighter;
+    background: #ff6b01;
+    border-radius: 5px;
+    padding: 3px 10px;
+    margin-left: 5px;
   }
 }
 
@@ -167,6 +181,7 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
   &-modal {
+    border: none;
     max-height: 50vw;
     max-width: 90vw;
     transform: translateY(50%) scale(1);
@@ -184,7 +199,34 @@
 .is-hidden,
 .is-hidden .trailer-modal {
   opacity: 0;
+  display: none;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(0%) scale(0);
+}
+
+.movie-list-change-theme {
+  cursor: pointer;
+  text-align: center;
+  background: 0 0;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  box-shadow: 1px 4px 6px #00000029;
+  padding: 2px 6px;
+}
+
+.icon-day {
+  fill: #fff;
+  background-color: #0000008b;
+}
+
+.icon-night {
+  fill: #1d1c1caa;
+  background-color: #fff;
+}
+
+.dark-mode {
+  color: var.$background-color-lighter !important;
+  background-color: var.$night-setting;
 }

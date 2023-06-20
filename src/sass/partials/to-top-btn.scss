@@ -1,0 +1,31 @@
+@use '../utils/variables' as var;
+
+.scroll-to-top-button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  margin: 30px;
+  background-color: var.$accent-color-darker;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  &:hover,
+  &:focus,
+  &:active {
+    cursor: pointer;
+    background-color: var.$active-color;
+  }
+  &__icon {
+    width: 40px;
+    height: 40px;
+    fill: var.$background-color-darker;
+  }
+}

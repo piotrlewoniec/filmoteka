@@ -1,5 +1,5 @@
-import { renderMoviePlaceholders } from './ui/noApi';
-import { axiosGetData } from './apirest/axiosGetData';
+import { renderMoviePlaceholders } from './ui/noapi';
+import { axiosGetData } from './apirest/axios-data';
 import {
   defaultHeaderGet,
   trendingMovieTOP20Url,
@@ -8,9 +8,17 @@ import {
 import { apikeyTMDB } from './config/apikey';
 import { renderMovieList } from './ui/cardgen';
 import { setPagination } from './ui/pagination';
+import { localStorageSave, localStorageLoad } from './system/localstorage';
 
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
+const configVariable = 'filmotekaconfig';
+
+if (configVariable in localStorage) {
+  const configVariableLocal = localStorageLoad(configVariable);
+  configVariableLocal.mylibrary = false;
+  localStorageSave(configVariable, configVariableLocal);
+}
 
 renderMoviePlaceholders(movieListContainer);
 
@@ -41,5 +49,6 @@ function displayResult(data) {
     paginationContainerRef: data.paginationContainer,
     currentPageRef: data.movies.data.page,
     totalPagesRef: data.movies.data.total_pages,
+    isLocalStorageRef: false,
   });
 }
