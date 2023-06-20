@@ -130,6 +130,8 @@ function createDots(direction) {
 }
 
 function renderPaginationButtons(currentPage, totalPages) {
+  const paginationButtons = Array.from(document.querySelectorAll('.pagination-btn'));
+  const isDarkMode = paginationButtons.some(button => button.classList.contains('dark-mode'));
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
   const isMobile = window.innerWidth <= 768; // Warunek dla urządzeń mobilnych
@@ -213,6 +215,12 @@ function renderPaginationButtons(currentPage, totalPages) {
         fetchMovies(totalPages);
       }
     });
+  }
+
+  if (isDarkMode) {
+    for (const paginationItem of paginationContainer.querySelectorAll('button')) {
+      paginationItem.classList.add('dark-mode');
+    }
   }
 }
 
