@@ -9,6 +9,7 @@ import { apikeyTMDB } from '../config/apikey';
 import { renderMovieList } from '../ui/cardgen';
 import { renderMoviePlaceholder } from '../ui/noapi';
 import { setPaginationLocalStorage } from '../ui/pagination';
+import Notiflix from 'notiflix';
 
 function localStorageCreate(libraryName) {
   localStorageSave(libraryName, []);
@@ -109,9 +110,17 @@ export async function localStorageLoadMovies(
     return;
   }
   if (moviesToDisplay.length <= maxMoviesPerPage) {
-    const movies = await fetchMoviesDetails(moviesToDisplay);
-    renderMovieList(movieListContainer, movies);
-    return;
+    Notiflix.Loading.pulse('Movies info download...');
+    try {
+      const movies = await fetchMoviesDetails(moviesToDisplay);
+      renderMovieList(movieListContainer, movies);
+      Notiflix.Loading.remove();
+      return;
+    } catch {
+      Notiflix.Notify.failure('Error downloading movies');
+      Notiflix.Loading.remove();
+      return;
+    }
   } else if (moviesToDisplay.length % maxMoviesPerPage !== 0) {
     moviesPageCount = Math.trunc(moviesToDisplay.length / maxMoviesPerPage) + 1;
   } else if (moviesToDisplay.length % maxMoviesPerPage === 0) {

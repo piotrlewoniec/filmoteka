@@ -13,6 +13,7 @@ import {
   searchMovieDetailsParams,
 } from '../config/stdquery';
 import { apikeyTMDB } from '../config/apikey';
+import Notiflix from 'notiflix';
 
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
@@ -22,21 +23,29 @@ const configVariable = 'filmotekaconfig';
 movieListContainer.addEventListener('click', showMovieModal);
 
 async function showMovieModal(event) {
-  if (event.target.type === 'button') {
+  if (
+    event.target.type === 'button' ||
+    event.target.className === 'movie-list-container' ||
+    event.target.className === 'movie-list-container dark-mode'
+  ) {
     return;
   }
   const header = { ...defaultHeaderGet, ...searchMovieDetailsUrl };
   header.url = `${event.target.dataset.movieid}`;
   const parameters = { ...searchMovieDetailsParams, api_key: apikeyTMDB };
-  const response = await axiosGetData(header, parameters);
-  const backdrop = document.querySelector('.movie-backdrop');
-  const movieWindowContent = document.querySelector('.movie-modal');
-  const btnWatchedCaption = setBtnName(libraryLocalName, response.data.id, 'watchedStatus');
-  const btnToWatchCaption = setBtnName(libraryLocalName, response.data.id, 'toWatchStatus');
-  backdrop.classList.remove('is-hidden');
-  movieWindowContent.insertAdjacentHTML(
-    'beforeend',
-    `<button class="button-close">
+
+  Notiflix.Loading.pulse('Movie info download...');
+  try {
+    const response = await axiosGetData(header, parameters);
+    Notiflix.Loading.remove();
+    const backdrop = document.querySelector('.movie-backdrop');
+    const movieWindowContent = document.querySelector('.movie-modal');
+    const btnWatchedCaption = setBtnName(libraryLocalName, response.data.id, 'watchedStatus');
+    const btnToWatchCaption = setBtnName(libraryLocalName, response.data.id, 'toWatchStatus');
+    backdrop.classList.remove('is-hidden');
+    movieWindowContent.insertAdjacentHTML(
+      'beforeend',
+      `<button class="button-close">
       <svg class="button-close__info" width="30px" height="30px" viewBox="0 0 32 32">
             </svg>
       </button>
@@ -72,8 +81,8 @@ async function showMovieModal(event) {
                       <li class="movie-info__results-item"><span class="movie-info__results-item--vote">${parseFloat(
                         response.data.vote_average.toFixed(1),
                       )}</span> / <span class="movie-info__results-item--count">${
-      response.data.vote_count
-    }</span></li>
+        response.data.vote_count
+      }</span></li>
                       <li class="movie-info__results-item">${response.data.popularity}</li>
                       <li class="movie-info__results-item">${response.data.original_title}</li>
                       <li class="movie-info__results-item">${response.data.genres
@@ -93,127 +102,131 @@ async function showMovieModal(event) {
               </ul>
   </div>
         `,
-  );
-  createModalButtonIcon();
-  const closeModalBtn = document.querySelector('.button-close');
-  closeModalBtn.onclick = function () {
-    backdrop.classList.add('is-hidden');
-    document.onkeydown = '';
-    document.onclick = '';
-    movieWindowContent.innerHTML = '';
-  };
+    );
+    createModalButtonIcon();
+    const closeModalBtn = document.querySelector('.button-close');
+    closeModalBtn.onclick = function () {
+      backdrop.classList.add('is-hidden');
+      document.onkeydown = '';
+      document.onclick = '';
+      movieWindowContent.innerHTML = '';
+    };
 
-  document.onkeydown = function (evt) {
-    evt = evt || window.event;
-    let isEscape = false;
-    if ('key' in evt) {
-      isEscape = evt.key === 'Escape' || evt.key === 'Esc';
-    } else {
-      isEscape = evt.keyCode === 27;
-    }
-    if (isEscape) {
-      closeModalBtn.onclick();
-    }
-  };
-
-  document.onclick = function (evt) {
-    if (evt.target.classList[0] === 'movie-backdrop') {
-      closeModalBtn.onclick();
-    }
-  };
-
-  const btnWatched = document.querySelector("[data-action='watched']");
-  const btnToWatch = document.querySelector("[data-action='queue']");
-
-  btnWatched.onclick = function () {
-    if (btnWatched.innerText.toLowerCase() === 'add to watched') {
-      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
-      if (movie !== undefined) {
-        localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
-        btnWatched.innerText = 'Remove from Watched';
+    document.onkeydown = function (evt) {
+      evt = evt || window.event;
+      let isEscape = false;
+      if ('key' in evt) {
+        isEscape = evt.key === 'Escape' || evt.key === 'Esc';
       } else {
-        localStorageAddMovie(libraryLocalName, response.data.id, 'watchedStatus');
-        btnWatched.innerText = 'Remove from Watched';
+        isEscape = evt.keyCode === 27;
       }
-      if (configVariable in localStorage) {
-        const configVariableLocal = localStorageLoad(configVariable);
-        if (configVariableLocal.mylibrary === true) {
-          if (configVariableLocal.queue === true) {
-            refreshLibrary('queue');
-          } else {
-            refreshLibrary('watched');
+      if (isEscape) {
+        closeModalBtn.onclick();
+      }
+    };
+
+    document.onclick = function (evt) {
+      if (evt.target.classList[0] === 'movie-backdrop') {
+        closeModalBtn.onclick();
+      }
+    };
+
+    const btnWatched = document.querySelector("[data-action='watched']");
+    const btnToWatch = document.querySelector("[data-action='queue']");
+
+    btnWatched.onclick = function () {
+      if (btnWatched.innerText.toLowerCase() === 'add to watched') {
+        const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+        if (movie !== undefined) {
+          localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
+          btnWatched.innerText = 'Remove from Watched';
+        } else {
+          localStorageAddMovie(libraryLocalName, response.data.id, 'watchedStatus');
+          btnWatched.innerText = 'Remove from Watched';
+        }
+        if (configVariable in localStorage) {
+          const configVariableLocal = localStorageLoad(configVariable);
+          if (configVariableLocal.mylibrary === true) {
+            if (configVariableLocal.queue === true) {
+              refreshLibrary('queue');
+            } else {
+              refreshLibrary('watched');
+            }
           }
         }
+        return;
       }
-      return;
-    }
-    if (btnWatched.innerText.toLowerCase() === 'remove from watched') {
-      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
-      if (movie.queue === true) {
-        localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
-        btnWatched.innerText = 'Add to Watched';
-      } else {
-        localStorageRemoveMovie(libraryLocalName, response.data.id);
-        btnWatched.innerText = 'Add to Watched';
-      }
-      if (configVariable in localStorage) {
-        const configVariableLocal = localStorageLoad(configVariable);
-        if (configVariableLocal.mylibrary === true) {
-          if (configVariableLocal.queue === true) {
-            refreshLibrary('queue');
-          } else {
-            refreshLibrary('watched');
+      if (btnWatched.innerText.toLowerCase() === 'remove from watched') {
+        const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+        if (movie.queue === true) {
+          localStorageUpdateMovie(libraryLocalName, response.data.id, 'watchedStatus');
+          btnWatched.innerText = 'Add to Watched';
+        } else {
+          localStorageRemoveMovie(libraryLocalName, response.data.id);
+          btnWatched.innerText = 'Add to Watched';
+        }
+        if (configVariable in localStorage) {
+          const configVariableLocal = localStorageLoad(configVariable);
+          if (configVariableLocal.mylibrary === true) {
+            if (configVariableLocal.queue === true) {
+              refreshLibrary('queue');
+            } else {
+              refreshLibrary('watched');
+            }
           }
         }
+        return;
       }
-      return;
-    }
-  };
+    };
 
-  btnToWatch.onclick = function () {
-    if (btnToWatch.innerText.toLowerCase() === 'add to queue') {
-      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
-      if (movie !== undefined) {
-        localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
-        btnToWatch.innerText = 'Remove from Queue';
-      } else {
-        localStorageAddMovie(libraryLocalName, response.data.id, 'toWatchStatus');
-        btnToWatch.innerText = 'Remove from Queue';
-      }
-      if (configVariable in localStorage) {
-        const configVariableLocal = localStorageLoad(configVariable);
-        if (configVariableLocal.mylibrary === true) {
-          if (configVariableLocal.queue === true) {
-            refreshLibrary('queue');
-          } else {
-            refreshLibrary('watched');
+    btnToWatch.onclick = function () {
+      if (btnToWatch.innerText.toLowerCase() === 'add to queue') {
+        const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+        if (movie !== undefined) {
+          localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+          btnToWatch.innerText = 'Remove from Queue';
+        } else {
+          localStorageAddMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+          btnToWatch.innerText = 'Remove from Queue';
+        }
+        if (configVariable in localStorage) {
+          const configVariableLocal = localStorageLoad(configVariable);
+          if (configVariableLocal.mylibrary === true) {
+            if (configVariableLocal.queue === true) {
+              refreshLibrary('queue');
+            } else {
+              refreshLibrary('watched');
+            }
           }
         }
+        return;
       }
-      return;
-    }
-    if (btnToWatch.innerText.toLowerCase() === 'remove from queue') {
-      const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
-      if (movie.watched === true) {
-        localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
-        btnToWatch.innerText = 'Add to Queue';
-      } else {
-        localStorageRemoveMovie(libraryLocalName, response.data.id);
-        btnToWatch.innerText = 'Add to Queue';
-      }
-      if (configVariable in localStorage) {
-        const configVariableLocal = localStorageLoad(configVariable);
-        if (configVariableLocal.mylibrary === true) {
-          if (configVariableLocal.queue === true) {
-            refreshLibrary('queue');
-          } else {
-            refreshLibrary('watched');
+      if (btnToWatch.innerText.toLowerCase() === 'remove from queue') {
+        const movie = localStorageGetMovieStatus(libraryLocalName, response.data.id);
+        if (movie.watched === true) {
+          localStorageUpdateMovie(libraryLocalName, response.data.id, 'toWatchStatus');
+          btnToWatch.innerText = 'Add to Queue';
+        } else {
+          localStorageRemoveMovie(libraryLocalName, response.data.id);
+          btnToWatch.innerText = 'Add to Queue';
+        }
+        if (configVariable in localStorage) {
+          const configVariableLocal = localStorageLoad(configVariable);
+          if (configVariableLocal.mylibrary === true) {
+            if (configVariableLocal.queue === true) {
+              refreshLibrary('queue');
+            } else {
+              refreshLibrary('watched');
+            }
           }
         }
+        return;
       }
-      return;
-    }
-  };
+    };
+  } catch {
+    Notiflix.Notify.failure('Error downloading movie info');
+    Notiflix.Loading.remove();
+  }
 }
 
 function setBtnName(libraryName, movieid, btnType) {

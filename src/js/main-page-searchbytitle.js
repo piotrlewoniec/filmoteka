@@ -24,11 +24,12 @@ searchForm.addEventListener('submit', async event => {
   if (searchQuery === '') {
     return;
   }
-
+  Notiflix.Loading.pulse('Movies info download...');
   try {
     const header = { ...defaultHeaderGet, ...searchMovieUrl };
     const parameters = { ...searchMovieParams, api_key: apikeyTMDB, query: searchQuery, page: 1 };
     const serverData = await axiosGetData(header, parameters);
+    Notiflix.Loading.remove();
     const movies = serverData.data;
     const formCopy = formContainer.firstElementChild;
     formContainer.replaceChildren();
@@ -42,6 +43,9 @@ searchForm.addEventListener('submit', async event => {
         `<p class="header__form-alert">
           Search result not successful. Enter the correct movie name and try again
         </p>`,
+      );
+      Notiflix.Notify.failure(
+        'Search result not successful. Enter the correct movie name and try again',
       );
       clearMovieList();
       paginationContainer.innerHTML = '';
@@ -63,8 +67,7 @@ searchForm.addEventListener('submit', async event => {
       });
     }
   } catch (error) {
-    Notiflix.Notify.failure(
-      'Search result not successful. Enter the correct movie name and try again',
-    );
+    Notiflix.Notify.failure('Error downloading movies');
+    Notiflix.Loading.remove();
   }
 });

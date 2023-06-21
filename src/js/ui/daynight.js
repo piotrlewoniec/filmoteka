@@ -63,7 +63,9 @@ if (configVariable in localStorage) {
   const configVariableLocal = localStorageLoad(configVariable);
   if (configVariableLocal.night === true) {
     setDarkMode();
+    // setTimeout(setDarkMode, 1000);
   } else {
     setLightMode();
+    // setTimeout(setLightMode, 1000);
   }
 }
