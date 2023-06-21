@@ -1,4 +1,5 @@
 import Notiflix from 'notiflix';
+import debounce from 'lodash.debounce';
 import { renderMoviePlaceholders } from './ui/noapi';
 import { axiosGetData } from './apirest/axios-data';
 import { defaultHeaderGet, searchMovieUrl, searchMovieParams } from './config/stdquery';
@@ -11,15 +12,18 @@ const paginationContainer = document.querySelector('.pagination');
 const searchForm = document.querySelector('.header__form-item');
 const searchInput = document.querySelector('.header__form-input');
 const formContainer = document.querySelector('.header__form');
+const debounceDelay = 500;
 
 Notiflix.Notify.init();
 function clearMovieList() {
   movieListContainer.innerHTML = '';
 }
 
-searchForm.addEventListener('submit', async event => {
-  event.preventDefault();
+searchForm.addEventListener('input', debounce(searchMovie, debounceDelay));
+searchForm.addEventListener('submit', searchMovie);
 
+async function searchMovie(event) {
+  event.preventDefault();
   const searchQuery = searchInput.value.trim();
   if (searchQuery === '') {
     return;
@@ -70,4 +74,5 @@ searchForm.addEventListener('submit', async event => {
     Notiflix.Notify.failure('Error downloading movies');
     Notiflix.Loading.remove();
   }
-});
+  searchInput.focus();
+}
