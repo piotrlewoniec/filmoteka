@@ -185,28 +185,51 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
   &-modal {
+    position: relative;
     border: none;
-    max-height: 50vw;
-    max-width: 90vw;
+    // max-height: 50vw;
+    // max-width: 90vw;
     transform: translateY(50%) scale(1);
     @include mq.tablet {
+      // max-height: 45vw;
+      // max-width: 80vw;
+    }
+    @include mq.desktop {
+      // max-height: 28vw;
+      // max-width: 49vw;
+    }
+  }
+  &-movieframe {
+    border: none;
+    height: 384px;
+    width: 690px;
+    max-height: 50vw;
+    max-width: 90vw;
+    @include mq.tablet {
+      height: 576px;
+      width: 1023px;
       max-height: 45vw;
       max-width: 80vw;
     }
     @include mq.desktop {
+      height: 467px;
+      width: 818px;
       max-height: 28vw;
       max-width: 49vw;
     }
   }
+
   &__button-close {
-    margin-top: 8px;
-    margin-right: 8px;
+    position: absolute;
+    top: -34px;
+    right: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   &__button-close-ico {
-    // stroke: var.$background-color-lighter;
     stroke: black;
     stroke-width: 2px;
-    // background-color: var.$text-color-darker;
     background-color: var.$background-color-lighter;
   }
 
