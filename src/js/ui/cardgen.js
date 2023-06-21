@@ -145,6 +145,20 @@ function showTrailerModal(iframe) {
   backdrop.classList.remove('is-hidden');
   backdrop.onclick = function () {
     backdrop.classList.add('is-hidden');
+    document.onkeydown = '';
     iframe.src = '';
+  };
+
+  document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    let isEscape = false;
+    if ('key' in evt) {
+      isEscape = evt.key === 'Escape' || evt.key === 'Esc';
+    } else {
+      isEscape = evt.keyCode === 27;
+    }
+    if (isEscape) {
+      backdrop.onclick();
+    }
   };
 }
