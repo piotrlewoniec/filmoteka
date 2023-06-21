@@ -93,11 +93,15 @@
   &__title {
     color: var.$text-color-darker;
     text-transform: uppercase;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   &__genre {
     color: var.$active-color;
     display: flex;
     align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   &__voting {
     font-weight: 500;
@@ -193,6 +197,21 @@
       max-height: 28vw;
       max-width: 49vw;
     }
+  }
+  &__button-close {
+    margin-top: 8px;
+    margin-right: 8px;
+  }
+  &__button-close-ico {
+    // stroke: var.$background-color-lighter;
+    stroke: black;
+    stroke-width: 2px;
+    // background-color: var.$text-color-darker;
+    background-color: var.$background-color-lighter;
+  }
+
+  &__button-close-ico:is(:focus, :hover) {
+    stroke: var.$active-color;
   }
 }
 
