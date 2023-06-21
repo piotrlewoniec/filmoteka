@@ -9,6 +9,7 @@ import { apikeyTMDB } from './config/apikey';
 import { renderMovieList } from './ui/cardgen';
 import { setPagination } from './ui/pagination';
 import { localStorageSave, localStorageLoad } from './system/localstorage';
+import Notiflix from 'notiflix';
 
 const movieListContainer = document.querySelector('.movie-list-container');
 const paginationContainer = document.querySelector('.pagination');
@@ -23,6 +24,7 @@ if (configVariable in localStorage) {
 renderMoviePlaceholders(movieListContainer);
 
 const trendingMoviesGet = async () => {
+  Notiflix.Loading.pulse('Movies info download...');
   const header = { ...defaultHeaderGet, ...trendingMovieTOP20Url };
   const parameters = { ...trendingMovieTOP20Params, api_key: apikeyTMDB, page: 1 };
   const movies = await axiosGetData(header, parameters);
@@ -38,9 +40,10 @@ const trendingMoviesGet = async () => {
 
 trendingMoviesGet()
   .then(data => displayResult(data))
-  .catch(error => console.log(error));
+  .catch(error => displayError(error));
 
 function displayResult(data) {
+  Notiflix.Loading.remove();
   renderMovieList(movieListContainer, data.movies.data.results);
   setPagination({
     headerRef: data.header,
@@ -51,4 +54,9 @@ function displayResult(data) {
     totalPagesRef: data.movies.data.total_pages,
     isLocalStorageRef: false,
   });
+}
+
+function displayError(error) {
+  Notiflix.Notify.failure('Error downloading movies');
+  Notiflix.Loading.remove();
 }

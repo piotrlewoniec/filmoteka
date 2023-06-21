@@ -3,15 +3,15 @@ import { renderMoviePlaceholders } from './noapi';
 import { axiosGetData } from '../apirest/axios-data';
 import { renderMovieList } from './cardgen';
 import { fetchMoviesDetails } from '../librarylocal/librarylocal';
+import { localStorageLoad } from '../system/localstorage';
 
+const configVariable = 'filmotekaconfig';
 let header = {};
 let parameters = {};
 let moviesContainer = {};
 let paginationContainer = {};
 let moviesArray;
-
 let currentPage = 1;
-
 let moviesPageCount = 0;
 let isLocalStorage = false;
 
@@ -29,17 +29,15 @@ export function setPagination({
   moviesContainer = movieListContainer;
   paginationContainer = paginationContainerRef;
   isLocalStorage = isLocalStorageRef;
-
   currentPage = currentPageRef;
   moviesPageCount = totalPagesRef;
-
   paginationContainer.classList.add('pagination-container'); // Dodanie klasy 'pagination-container'
   renderPaginationButtons(currentPageRef, totalPagesRef);
   window.scrollBy({
     top: -document.body.offsetHeight,
     behavior: 'smooth',
   });
-  // Reload paggination on screen size change
+  // Reload pagination on screen size change
   window.matchMedia('(min-width: 768px)').addEventListener('change', e => {
     // if (!e.matches) return;
     renderPaginationButtons(currentPage, moviesPageCount);
@@ -67,15 +65,15 @@ export function setPaginationLocalStorage({
     top: -document.body.offsetHeight,
     behavior: 'smooth',
   });
+  // Reload pagination on screen size change
   window.matchMedia('(min-width: 768px)').addEventListener('change', e => {
     // if (!e.matches) return;
     renderPaginationButtons(currentPage, moviesPageCount);
   });
 }
 
-// Dodajemy notyfikację przed pobraniem filmów
 async function fetchMovies(page) {
-  Notiflix.Loading.pulse('Pobieranie filmów...');
+  Notiflix.Loading.pulse('Movies info download...');
   if (isLocalStorage) {
     const maxMoviesPerPage = 20;
     let startIndex = 0;
@@ -99,9 +97,7 @@ async function fetchMovies(page) {
       currentPage = page;
       Notiflix.Loading.remove();
     } catch (error) {
-      // Wyświetlamy notyfikację o błędzie
-      Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
-      // Wyświetlamy notyfikację o błędzie
+      Notiflix.Notify.failure('Error downloading movies');
       Notiflix.Loading.remove();
     }
   } else {
@@ -123,13 +119,9 @@ async function fetchMovies(page) {
         top: -document.body.offsetHeight,
         behavior: 'smooth',
       });
-
-      // Ukrywamy notyfikację po pobraniu filmów
       Notiflix.Loading.remove();
     } catch (error) {
-      // Wyświetlamy notyfikację o błędzie
-      Notiflix.Notify.failure('Wystąpił błąd podczas pobierania filmów');
-      // Wyświetlamy notyfikację o błędzie
+      Notiflix.Notify.failure('Error downloading movies');
       Notiflix.Loading.remove();
     }
   }
@@ -150,8 +142,6 @@ function createDots(direction) {
 }
 
 function renderPaginationButtons(currentPage, totalPages) {
-  const paginationButtons = Array.from(document.querySelectorAll('.pagination-btn'));
-  const isDarkMode = paginationButtons.some(button => button.classList.contains('dark-mode'));
   paginationContainer.innerHTML = ''; // Wyczyszczenie paginacji
 
   const isMobile = window.innerWidth <= 768; // Warunek dla urządzeń mobilnych
@@ -237,9 +227,23 @@ function renderPaginationButtons(currentPage, totalPages) {
     });
   }
 
-  if (isDarkMode) {
+  const isDarkMode = () => {
+    if (configVariable in localStorage) {
+      const configVariableLocal = localStorageLoad(configVariable);
+      if (configVariableLocal.night === false) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+  if (isDarkMode()) {
     for (const paginationItem of paginationContainer.querySelectorAll('button')) {
       paginationItem.classList.add('dark-mode');
+    }
+  } else {
+    for (const paginationItem of paginationContainer.querySelectorAll('button')) {
+      paginationItem.classList.remove('dark-mode');
     }
   }
 }
