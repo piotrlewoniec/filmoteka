@@ -19,7 +19,8 @@
     top: 50%;
     left: 50%;
     width: 280px;
-    max-height: 120vw;
+    // max-height: 120vw;
+    max-height: 90%;
     padding: 48px 20px 40px 20px;
     background-color: var.$background-color-lighter;
     border-radius: 4px;
@@ -166,6 +167,7 @@
   background: none;
   font-weight: 500;
   font-size: 12px;
+  color: var.$text-color-darker;
   text-transform: uppercase;
   cursor: pointer;
   &--watched {

@@ -107,8 +107,11 @@ async function fetchMovies(page) {
       const serverData = await axiosGetData(header, parameters);
       const movies = serverData.data;
       currentPageLocal = movies.page;
-      totalPagesLocal = movies.total_pages;
-
+      if (header.baseURL === 'https://api.themoviedb.org/3/trending/movie/day') {
+        totalPagesLocal = 500;
+      } else {
+        totalPagesLocal = movies.total_pages;
+      }
       moviesContainer.innerHTML = ''; // Wyczyszczenie wyników
       renderMoviePlaceholders(moviesContainer);
       renderMovieList(moviesContainer, movies.results);

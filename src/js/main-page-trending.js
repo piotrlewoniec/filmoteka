@@ -45,13 +45,14 @@ trendingMoviesGet()
 function displayResult(data) {
   Notiflix.Loading.remove();
   renderMovieList(movieListContainer, data.movies.data.results);
+
   setPagination({
     headerRef: data.header,
     parametersRef: data.parameters,
     movieListContainer: data.movieListContainer,
     paginationContainerRef: data.paginationContainer,
     currentPageRef: data.movies.data.page,
-    totalPagesRef: data.movies.data.total_pages,
+    totalPagesRef: 500, //data.movies.data.total_pages
     isLocalStorageRef: false,
   });
 }

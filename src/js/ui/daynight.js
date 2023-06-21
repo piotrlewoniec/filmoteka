@@ -34,7 +34,7 @@ function setDarkMode() {
   // event.currentTarget.classList.add('is-hidden');
   section.classList.add('dark-mode');
   container.classList.add('dark-mode');
-  body.style.backgroundColor = '#000';
+  body.style.backgroundColor = '#0e0d0d';
   buttonIconDay.classList.remove('is-hidden');
   buttonIconNight.classList.add('is-hidden');
   paginationButtons.forEach(button => {
